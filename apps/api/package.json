@@ -1,0 +1,33 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Hono API for documentation generation",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "keywords": [
+    "api",
+    "hono",
+    "langchain"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^24.0.14",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.16.0",
+    "@hono/zod-validator": "^0.7.1",
+    "@langchain/openai": "^0.6.2",
+    "dotenv": "^17.2.0",
+    "hono": "^4.8.5",
+    "langchain": "^0.3.30",
+    "z": "^1.0.9"
+  }
+}

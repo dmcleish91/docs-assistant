@@ -1,0 +1,11 @@
+{
+  "tasks": {
+    "dev": {
+      "dependsOn": ["^dev"],
+      "cache": false
+    },
+    "build": {
+      "dependsOn": ["^build"]
+    }
+  }
+} 

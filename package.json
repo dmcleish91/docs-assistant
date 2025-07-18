@@ -1,0 +1,19 @@
+{
+  "name": "docs-assistant",
+  "version": "1.0.0",
+  "description": "A fullstack tool to generate markdown documentation using LangChain.js, Hono, and React",
+  "private": true,
+  "packageManager": "npm@9.7.2",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.5"
+  },
+  "keywords": ["documentation", "langchain", "hono", "react", "monorepo"],
+  "author": "",
+  "license": "ISC"
+}
