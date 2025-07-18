@@ -68,7 +68,7 @@ export const DocumentationForm = ({ onSubmit, isLoading, error, onErrorDismiss }
           value={input}
           onChange={handleInputChange}
           placeholder='e.g., API for note-taking app, React component library, Database schema...'
-          rows={4}
+          rows={3}
           required
           disabled={isLoading}
           aria-describedby={errors.topic ? 'topic-error' : 'topic-help'}
