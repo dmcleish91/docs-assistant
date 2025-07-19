@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { API_CONFIG, UI_CONSTANTS } from '../constants';
 
 interface DocumentationFormData {
@@ -44,6 +44,15 @@ export const useDocumentationGenerator = (): UseDocumentationGeneratorReturn => 
     setError(null);
     setDownloadUrl(null);
   };
+
+  // Cleanup URL objects to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (downloadUrl) {
+        URL.revokeObjectURL(downloadUrl);
+      }
+    };
+  }, [downloadUrl]);
 
   const generateDocumentation = async (formData: DocumentationFormData) => {
     setError(null);

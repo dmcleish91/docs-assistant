@@ -23,11 +23,9 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.16.0",
-    "@hono/zod-validator": "^0.7.1",
     "@langchain/openai": "^0.6.2",
     "dotenv": "^17.2.0",
     "hono": "^4.8.5",
-    "langchain": "^0.3.30",
     "z": "^1.0.9"
   }
 }

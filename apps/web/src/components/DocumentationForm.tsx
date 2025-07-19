@@ -7,6 +7,8 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { useDocumentationForm } from '../hooks/useDocumentationForm';
 
+// TODO: Wrap this component with React.memo for performance optimization
+
 interface DocumentationFormData {
   projectName: string;
   description: string;
@@ -36,9 +38,6 @@ export const DocumentationForm = ({ onSubmit, isLoading }: DocumentationFormProp
 
   return (
     <Card className='w-full max-w-4xl mx-auto bg-white/10 backdrop-blur-md border-white/20'>
-      <CardHeader>
-        <CardTitle className='text-center text-2xl font-bold'>Documentation Generator</CardTitle>
-      </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className='space-y-6' noValidate>
           {/* Project Name */}
@@ -87,13 +86,13 @@ export const DocumentationForm = ({ onSubmit, isLoading }: DocumentationFormProp
               name='description'
               value={formData.description}
               onChange={(e) => handleInputChange('description', e.target.value)}
-              rows={3}
+              rows={2}
               required
               disabled={isLoading}
               aria-describedby={errors.description ? 'description-error' : 'description-help'}
               aria-invalid={!!errors.description}
               maxLength={getMaxLength('description')}
-              className={cn('min-h-[120px] transition-all duration-300', errors.description && 'border-red-400 focus-visible:ring-red-400')}
+              className={cn('transition-all duration-300', errors.description && 'border-red-400 focus-visible:ring-red-400')}
             />
             {errors.description && (
               <div id='description-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
@@ -121,16 +120,13 @@ export const DocumentationForm = ({ onSubmit, isLoading }: DocumentationFormProp
               name='prerequisites'
               value={formData.prerequisites}
               onChange={(e) => handleInputChange('prerequisites', e.target.value)}
-              rows={3}
+              rows={2}
               required
               disabled={isLoading}
               aria-describedby={errors.prerequisites ? 'prerequisites-error' : 'prerequisites-help'}
               aria-invalid={!!errors.prerequisites}
               maxLength={getMaxLength('prerequisites')}
-              className={cn(
-                'min-h-[120px] transition-all duration-300',
-                errors.prerequisites && 'border-red-400 focus-visible:ring-red-400'
-              )}
+              className={cn('transition-all duration-300', errors.prerequisites && 'border-red-400 focus-visible:ring-red-400')}
             />
             {errors.prerequisites && (
               <div id='prerequisites-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
@@ -158,16 +154,13 @@ export const DocumentationForm = ({ onSubmit, isLoading }: DocumentationFormProp
               name='environmentalSetup'
               value={formData.environmentalSetup}
               onChange={(e) => handleInputChange('environmentalSetup', e.target.value)}
-              rows={4}
+              rows={2}
               required
               disabled={isLoading}
               aria-describedby={errors.environmentalSetup ? 'environmentalSetup-error' : 'environmentalSetup-help'}
               aria-invalid={!!errors.environmentalSetup}
               maxLength={getMaxLength('environmentalSetup')}
-              className={cn(
-                'min-h-[160px] transition-all duration-300',
-                errors.environmentalSetup && 'border-red-400 focus-visible:ring-red-400'
-              )}
+              className={cn('transition-all duration-300', errors.environmentalSetup && 'border-red-400 focus-visible:ring-red-400')}
             />
             {errors.environmentalSetup && (
               <div id='environmentalSetup-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
@@ -195,16 +188,13 @@ export const DocumentationForm = ({ onSubmit, isLoading }: DocumentationFormProp
               name='localDevServer'
               value={formData.localDevServer}
               onChange={(e) => handleInputChange('localDevServer', e.target.value)}
-              rows={3}
+              rows={2}
               required
               disabled={isLoading}
               aria-describedby={errors.localDevServer ? 'localDevServer-error' : 'localDevServer-help'}
               aria-invalid={!!errors.localDevServer}
               maxLength={getMaxLength('localDevServer')}
-              className={cn(
-                'min-h-[120px] transition-all duration-300',
-                errors.localDevServer && 'border-red-400 focus-visible:ring-red-400'
-              )}
+              className={cn('transition-all duration-300', errors.localDevServer && 'border-red-400 focus-visible:ring-red-400')}
             />
             {errors.localDevServer && (
               <div id='localDevServer-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
@@ -232,16 +222,13 @@ export const DocumentationForm = ({ onSubmit, isLoading }: DocumentationFormProp
               name='deploymentInfo'
               value={formData.deploymentInfo}
               onChange={(e) => handleInputChange('deploymentInfo', e.target.value)}
-              rows={3}
+              rows={2}
               required
               disabled={isLoading}
               aria-describedby={errors.deploymentInfo ? 'deploymentInfo-error' : 'deploymentInfo-help'}
               aria-invalid={!!errors.deploymentInfo}
               maxLength={getMaxLength('deploymentInfo')}
-              className={cn(
-                'min-h-[120px] transition-all duration-300',
-                errors.deploymentInfo && 'border-red-400 focus-visible:ring-red-400'
-              )}
+              className={cn('transition-all duration-300', errors.deploymentInfo && 'border-red-400 focus-visible:ring-red-400')}
             />
             {errors.deploymentInfo && (
               <div id='deploymentInfo-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
