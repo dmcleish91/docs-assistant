@@ -4,7 +4,10 @@
   "description": "A fullstack tool to generate markdown documentation using LangChain.js, Hono, and React",
   "private": true,
   "packageManager": "npm@9.7.2",
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
@@ -13,7 +16,13 @@
   "devDependencies": {
     "turbo": "^2.5.5"
   },
-  "keywords": ["documentation", "langchain", "hono", "react", "monorepo"],
+  "keywords": [
+    "documentation",
+    "langchain",
+    "hono",
+    "react",
+    "monorepo"
+  ],
   "author": "",
   "license": "ISC"
 }

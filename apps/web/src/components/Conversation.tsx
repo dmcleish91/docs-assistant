@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { LoadingButton } from './LoadingButton';
 import { UI_CONSTANTS } from '../constants';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 interface ConversationMessage {
   id: string;
@@ -40,94 +45,113 @@ export const Conversation = ({ messages, currentTopic, isLoading, onSendResponse
   };
 
   return (
-    <div className='conversation'>
-      <div className='conversation-header'>
-        <h3>Documentation Assistant</h3>
-        <p className='topic'>Topic: {currentTopic}</p>
-        <button onClick={onReset} className='reset-button' disabled={isLoading}>
-          Start Over
-        </button>
-      </div>
+    <Card className='max-h-[70vh] flex flex-col bg-white/10 backdrop-blur-md border-white/20'>
+      <CardHeader className='pb-4 border-b border-white/20'>
+        <div className='flex flex-col md:flex-row md:justify-between md:items-center gap-2 md:gap-0'>
+          <CardTitle className='text-xl md:text-2xl'>Documentation Assistant</CardTitle>
+          <div className='flex items-center gap-4'>
+            <Badge variant='secondary' className='text-sm md:text-base'>
+              Topic: {currentTopic}
+            </Badge>
+            <Button onClick={onReset} variant='outline' size='sm' disabled={isLoading}>
+              Start Over
+            </Button>
+          </div>
+        </div>
+      </CardHeader>
 
-      <div className='messages-container'>
+      <CardContent className='flex-1 overflow-y-auto space-y-4 p-6'>
         {messages.map((message, index) => (
-          <div key={message.id} className='message-group'>
+          <div key={message.id} className='space-y-3'>
             {/* AI Questions */}
-            <div className='message ai-message'>
-              <div className='message-header'>
-                <span className='sender'>🤖 Assistant</span>
-                <span className='time'>{formatTime(message.timestamp)}</span>
-              </div>
-              <div className='message-content'>
-                {message.questions.split('\n').map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
-              </div>
-            </div>
+            <Card className='bg-muted/50'>
+              <CardContent className='p-4'>
+                <div className='flex justify-between items-center mb-2'>
+                  <span className='font-medium text-sm'>🤖 Assistant</span>
+                  <span className='text-xs text-muted-foreground'>{formatTime(message.timestamp)}</span>
+                </div>
+                <div className='space-y-1'>
+                  {message.questions.split('\n').map((line, i) => (
+                    <p key={i} className='m-0 text-sm'>
+                      {line}
+                    </p>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
             {/* User Response (if exists) */}
             {message.userResponse && (
-              <div className='message user-message'>
-                <div className='message-header'>
-                  <span className='sender'>👤 You</span>
-                  <span className='time'>{formatTime(message.timestamp)}</span>
-                </div>
-                <div className='message-content'>
-                  {message.userResponse.split('\n').map((line, i) => (
-                    <p key={i}>{line}</p>
-                  ))}
-                </div>
-              </div>
+              <Card className='bg-primary/20'>
+                <CardContent className='p-4'>
+                  <div className='flex justify-between items-center mb-2'>
+                    <span className='font-medium text-sm'>👤 You</span>
+                    <span className='text-xs text-muted-foreground'>{formatTime(message.timestamp)}</span>
+                  </div>
+                  <div className='space-y-1'>
+                    {message.userResponse.split('\n').map((line, i) => (
+                      <p key={i} className='m-0 text-sm'>
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             )}
           </div>
         ))}
 
         {isLoading && (
-          <div className='message ai-message'>
-            <div className='message-header'>
-              <span className='sender'>🤖 Assistant</span>
-            </div>
-            <div className='message-content'>
-              <div className='typing-indicator'>
-                <span></span>
-                <span></span>
-                <span></span>
+          <Card className='bg-muted/50'>
+            <CardContent className='p-4'>
+              <div className='flex justify-between items-center mb-2'>
+                <span className='font-medium text-sm'>🤖 Assistant</span>
               </div>
-            </div>
-          </div>
+              <div className='flex space-x-1'>
+                <span className='w-2 h-2 bg-muted-foreground rounded-full animate-[typing_1.4s_ease-in-out_infinite]'></span>
+                <span className='w-2 h-2 bg-muted-foreground rounded-full animate-[typing_1.4s_ease-in-out_infinite_0.2s]'></span>
+                <span className='w-2 h-2 bg-muted-foreground rounded-full animate-[typing_1.4s_ease-in-out_infinite_0.4s]'></span>
+              </div>
+            </CardContent>
+          </Card>
         )}
-      </div>
+      </CardContent>
 
       {/* Response Input */}
       {messages.length > 0 && !isLoading && (
-        <div className='response-input'>
-          <textarea
-            value={currentResponse}
-            onChange={(e) => setCurrentResponse(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder='Type your response here...'
-            rows={3}
-            disabled={isLoading}
-          />
-          <div className='input-actions'>
-            <LoadingButton
-              loading={isLoading}
-              disabled={!currentResponse.trim() || isLoading}
-              loadingText='Sending...'
-              onClick={handleSendResponse}>
-              Send Message
-            </LoadingButton>
-            <LoadingButton
-              loading={isLoading}
+        <CardContent className='border-t border-border/50 p-6'>
+          <div className='space-y-4'>
+            <Textarea
+              value={currentResponse}
+              onChange={(e) => setCurrentResponse(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder='Type your response here...'
+              rows={3}
               disabled={isLoading}
-              loadingText='Generating...'
-              onClick={onDownloadReadme}
-              className='secondary-btn'>
-              Generate Documentation
-            </LoadingButton>
+              className='min-h-[120px]'
+            />
+            <div className='flex flex-col md:flex-row gap-3 md:gap-4'>
+              <LoadingButton
+                loading={isLoading}
+                disabled={!currentResponse.trim() || isLoading}
+                loadingText='Sending...'
+                onClick={handleSendResponse}
+                className='flex-1'>
+                Send Message
+              </LoadingButton>
+              <LoadingButton
+                loading={isLoading}
+                disabled={isLoading}
+                loadingText='Generating...'
+                onClick={onDownloadReadme}
+                variant='outline'
+                className='flex-1'>
+                Generate Documentation
+              </LoadingButton>
+            </div>
           </div>
-        </div>
+        </CardContent>
       )}
-    </div>
+    </Card>
   );
 };

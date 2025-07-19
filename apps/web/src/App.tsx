@@ -1,4 +1,3 @@
-import './App.css';
 import { useConversation } from './hooks/useConversation';
 import { Header } from './components/Header';
 import { DocumentationForm } from './components/DocumentationForm';
@@ -16,10 +15,10 @@ export default function App() {
   const isInConversation = currentTopic && messages.length > 0;
 
   return (
-    <div className='App'>
+    <div className='min-h-screen min-w-screen flex flex-col items-center justify-center bg-background text-foreground p-4'>
       <Header title='📚 Documentation Assistant' subtitle='Generate markdown documentation with AI' />
 
-      <main className='App-main'>
+      <main className='w-full max-w-4xl'>
         {error && <ErrorMessage error={error} onDismiss={clearError} />}
 
         {!isInConversation ? (
