@@ -89,10 +89,8 @@ const generateDocumentationSchema = z.object({
 app.post('/generate-documentation', async (c) => {
   try {
     const body = await c.req.json();
-    console.log('Received request body:', JSON.stringify(body, null, 2));
 
     const formData = generateDocumentationSchema.parse(body);
-    console.log('Validated form data:', JSON.stringify(formData, null, 2));
 
     const doc = await documentationPrompt.pipe(llm).invoke({
       projectName: formData.projectName,

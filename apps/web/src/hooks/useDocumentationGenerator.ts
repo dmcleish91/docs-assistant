@@ -57,8 +57,6 @@ export const useDocumentationGenerator = (): UseDocumentationGeneratorReturn => 
     setIsLoading(true);
 
     try {
-      console.log('Sending form data to API:', JSON.stringify(formData, null, 2));
-
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), API_CONFIG.TIMEOUT);
 

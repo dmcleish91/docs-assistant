@@ -90,14 +90,12 @@ export const MultiStepForm = ({ onSubmit, isLoading }: MultiStepFormProps) => {
 
   const handleNext = async () => {
     if (currentStep === steps.length) {
-      // Submit form on last step
       const isValid = await form.trigger();
       if (isValid) {
         const data = form.getValues();
         await handleSubmit(data);
       }
     } else {
-      // Validate current step before proceeding
       const currentStepFields = getStepFields(currentStep);
       const isValid = await form.trigger(currentStepFields);
       if (isValid) {

@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-// Step 1: Project Basics
 export const projectBasicsSchema = z.object({
   projectName: z
     .string()
@@ -12,7 +11,6 @@ export const projectBasicsSchema = z.object({
     .max(1000, 'Description must be less than 1000 characters'),
 });
 
-// Step 2: Technical Details
 export const technicalDetailsSchema = z.object({
   prerequisites: z
     .string()
@@ -24,7 +22,6 @@ export const technicalDetailsSchema = z.object({
     .max(2000, 'Setup steps must be less than 2000 characters'),
 });
 
-// Step 3: Development & Deployment
 export const developmentSchema = z.object({
   localDevServer: z
     .string()
@@ -36,10 +33,8 @@ export const developmentSchema = z.object({
     .max(1000, 'Deployment instructions must be less than 1000 characters'),
 });
 
-// Complete form schema
 export const documentationFormSchema = projectBasicsSchema.merge(technicalDetailsSchema).merge(developmentSchema);
 
-// TypeScript types
 export type ProjectBasicsFormData = z.infer<typeof projectBasicsSchema>;
 export type TechnicalDetailsFormData = z.infer<typeof technicalDetailsSchema>;
 export type DevelopmentFormData = z.infer<typeof developmentSchema>;
