@@ -29,7 +29,6 @@ interface UseDocumentationFormReturn {
   isFormValid: boolean;
 }
 
-// Helper function to validate individual fields
 const validateField = (
   value: string,
   minLength: number,
@@ -58,7 +57,6 @@ export const useDocumentationForm = (): UseDocumentationFormReturn => {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    // Project Name validation
     newErrors.projectName = validateField(
       formData.projectName,
       FORM_VALIDATION.MIN_PROJECT_NAME_LENGTH,
@@ -68,7 +66,6 @@ export const useDocumentationForm = (): UseDocumentationFormReturn => {
       UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PROJECT_NAME_MAX_LENGTH
     );
 
-    // Description validation
     newErrors.description = validateField(
       formData.description,
       FORM_VALIDATION.MIN_DESCRIPTION_LENGTH,
@@ -78,7 +75,6 @@ export const useDocumentationForm = (): UseDocumentationFormReturn => {
       UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DESCRIPTION_MAX_LENGTH
     );
 
-    // Prerequisites validation
     newErrors.prerequisites = validateField(
       formData.prerequisites,
       FORM_VALIDATION.MIN_PREREQUISITES_LENGTH,
@@ -88,7 +84,6 @@ export const useDocumentationForm = (): UseDocumentationFormReturn => {
       UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PREREQUISITES_MAX_LENGTH
     );
 
-    // Environmental Setup validation
     newErrors.environmentalSetup = validateField(
       formData.environmentalSetup,
       FORM_VALIDATION.MIN_SETUP_STEPS_LENGTH,
@@ -98,7 +93,6 @@ export const useDocumentationForm = (): UseDocumentationFormReturn => {
       UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_MAX_LENGTH
     );
 
-    // Local Development Server validation
     newErrors.localDevServer = validateField(
       formData.localDevServer,
       FORM_VALIDATION.MIN_LOCAL_DEV_LENGTH,
@@ -108,7 +102,6 @@ export const useDocumentationForm = (): UseDocumentationFormReturn => {
       UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.LOCAL_DEV_MAX_LENGTH
     );
 
-    // Deployment Info validation
     newErrors.deploymentInfo = validateField(
       formData.deploymentInfo,
       FORM_VALIDATION.MIN_DEPLOYMENT_LENGTH,
@@ -125,7 +118,6 @@ export const useDocumentationForm = (): UseDocumentationFormReturn => {
   const handleInputChange = (field: keyof DocumentationFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
 
-    // Clear error when user starts typing
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     }

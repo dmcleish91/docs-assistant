@@ -1,4 +1,3 @@
-// API Configuration
 export const API_CONFIG = {
   BASE_URL: 'http://localhost:8787',
   ENDPOINTS: {
@@ -7,7 +6,6 @@ export const API_CONFIG = {
   TIMEOUT: 30000, // 30 seconds
 } as const;
 
-// Form Validation
 export const FORM_VALIDATION = {
   MIN_PROJECT_NAME_LENGTH: 3,
   MAX_PROJECT_NAME_LENGTH: 100,
@@ -23,7 +21,6 @@ export const FORM_VALIDATION = {
   MAX_DEPLOYMENT_LENGTH: 1000,
 } as const;
 
-// UI Constants
 export const UI_CONSTANTS = {
   LOADING_TEXT: 'Generating documentation...',
   SUBMIT_TEXT: 'Generate Documentation',

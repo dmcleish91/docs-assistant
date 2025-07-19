@@ -18,7 +18,6 @@ interface UseDocumentationGeneratorReturn {
   resetState: () => void;
 }
 
-// Helper function to extract error messages
 const getErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
     if (error.name === 'AbortError') {
@@ -45,7 +44,6 @@ export const useDocumentationGenerator = (): UseDocumentationGeneratorReturn => 
     setDownloadUrl(null);
   };
 
-  // Cleanup URL objects to prevent memory leaks
   useEffect(() => {
     return () => {
       if (downloadUrl) {

@@ -5,7 +5,6 @@ import { z } from 'zod';
 import { ChatOpenAI } from '@langchain/openai';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 
-// Check for required environment variables
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 if (!OPENAI_API_KEY) {
   console.error('❌ OPENAI_API_KEY environment variable is required');
@@ -20,12 +19,10 @@ const llm = new ChatOpenAI({
   openAIApiKey: OPENAI_API_KEY,
 });
 
-// Helper function to handle LLM responses
 const handleLLMResponse = (content: any): string => {
   return typeof content === 'string' ? content : JSON.stringify(content);
 };
 
-// Helper function to handle errors
 const handleError = (error: any, c: any) => {
   console.error('API error:', error);
 
@@ -122,7 +119,6 @@ app.post('/generate-documentation', async (c) => {
   }
 });
 
-// Health check endpoint
 app.get('/', (c) => c.text('Documentation Generator API is running!'));
 
 const port = parseInt(process.env.PORT || '8787', 10);

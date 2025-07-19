@@ -4,7 +4,6 @@ import { DocumentationForm } from './components/DocumentationForm';
 import { DocumentationSuccess } from './components/DocumentationSuccess';
 import { ErrorMessage } from './components/ErrorMessage';
 
-// Import the interface for proper typing
 interface DocumentationFormData {
   projectName: string;
   description: string;

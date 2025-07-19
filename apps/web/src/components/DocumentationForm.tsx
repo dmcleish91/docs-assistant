@@ -7,8 +7,6 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { useDocumentationForm } from '../hooks/useDocumentationForm';
 
-// TODO: Wrap this component with React.memo for performance optimization
-
 interface DocumentationFormData {
   projectName: string;
   description: string;
@@ -40,7 +38,6 @@ export const DocumentationForm = ({ onSubmit, isLoading }: DocumentationFormProp
     <Card className='w-full max-w-4xl mx-auto bg-white/10 backdrop-blur-md border-white/20'>
       <CardContent>
         <form onSubmit={handleSubmit} className='space-y-6' noValidate>
-          {/* Project Name */}
           <div className='space-y-2'>
             <Label htmlFor='projectName' className='text-base font-semibold'>
               Project Name
@@ -73,7 +70,6 @@ export const DocumentationForm = ({ onSubmit, isLoading }: DocumentationFormProp
             </div>
           </div>
 
-          {/* Project Description */}
           <div className='space-y-2'>
             <Label htmlFor='description' className='text-base font-semibold'>
               Project Description
@@ -107,7 +103,6 @@ export const DocumentationForm = ({ onSubmit, isLoading }: DocumentationFormProp
             </div>
           </div>
 
-          {/* Prerequisites */}
           <div className='space-y-2'>
             <Label htmlFor='prerequisites' className='text-base font-semibold'>
               Prerequisites
@@ -141,7 +136,6 @@ export const DocumentationForm = ({ onSubmit, isLoading }: DocumentationFormProp
             </div>
           </div>
 
-          {/* Environmental Setup */}
           <div className='space-y-2'>
             <Label htmlFor='environmentalSetup' className='text-base font-semibold'>
               Environment Setup Steps
@@ -175,7 +169,6 @@ export const DocumentationForm = ({ onSubmit, isLoading }: DocumentationFormProp
             </div>
           </div>
 
-          {/* Local Development Server */}
           <div className='space-y-2'>
             <Label htmlFor='localDevServer' className='text-base font-semibold'>
               Local Development Server Instructions
@@ -209,7 +202,6 @@ export const DocumentationForm = ({ onSubmit, isLoading }: DocumentationFormProp
             </div>
           </div>
 
-          {/* Deployment */}
           <div className='space-y-2'>
             <Label htmlFor='deploymentInfo' className='text-base font-semibold'>
               Production Deployment Instructions
