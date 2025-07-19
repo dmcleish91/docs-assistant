@@ -29,6 +29,21 @@ interface UseDocumentationFormReturn {
   isFormValid: boolean;
 }
 
+// Helper function to validate individual fields
+const validateField = (
+  value: string,
+  minLength: number,
+  maxLength: number,
+  requiredMessage: string,
+  minMessage: string,
+  maxMessage: string
+): string | undefined => {
+  if (!value.trim()) return requiredMessage;
+  if (value.trim().length < minLength) return minMessage;
+  if (value.trim().length > maxLength) return maxMessage;
+  return undefined;
+};
+
 export const useDocumentationForm = (): UseDocumentationFormReturn => {
   const [formData, setFormData] = useState<DocumentationFormData>({
     projectName: '',
@@ -44,58 +59,64 @@ export const useDocumentationForm = (): UseDocumentationFormReturn => {
     const newErrors: FormErrors = {};
 
     // Project Name validation
-    if (!formData.projectName.trim()) {
-      newErrors.projectName = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PROJECT_NAME_REQUIRED;
-    } else if (formData.projectName.trim().length < FORM_VALIDATION.MIN_PROJECT_NAME_LENGTH) {
-      newErrors.projectName = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PROJECT_NAME_MIN_LENGTH;
-    } else if (formData.projectName.trim().length > FORM_VALIDATION.MAX_PROJECT_NAME_LENGTH) {
-      newErrors.projectName = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PROJECT_NAME_MAX_LENGTH;
-    }
+    newErrors.projectName = validateField(
+      formData.projectName,
+      FORM_VALIDATION.MIN_PROJECT_NAME_LENGTH,
+      FORM_VALIDATION.MAX_PROJECT_NAME_LENGTH,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PROJECT_NAME_REQUIRED,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PROJECT_NAME_MIN_LENGTH,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PROJECT_NAME_MAX_LENGTH
+    );
 
     // Description validation
-    if (!formData.description.trim()) {
-      newErrors.description = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DESCRIPTION_REQUIRED;
-    } else if (formData.description.trim().length < FORM_VALIDATION.MIN_DESCRIPTION_LENGTH) {
-      newErrors.description = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DESCRIPTION_MIN_LENGTH;
-    } else if (formData.description.trim().length > FORM_VALIDATION.MAX_DESCRIPTION_LENGTH) {
-      newErrors.description = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DESCRIPTION_MAX_LENGTH;
-    }
+    newErrors.description = validateField(
+      formData.description,
+      FORM_VALIDATION.MIN_DESCRIPTION_LENGTH,
+      FORM_VALIDATION.MAX_DESCRIPTION_LENGTH,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DESCRIPTION_REQUIRED,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DESCRIPTION_MIN_LENGTH,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DESCRIPTION_MAX_LENGTH
+    );
 
     // Prerequisites validation
-    if (!formData.prerequisites.trim()) {
-      newErrors.prerequisites = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PREREQUISITES_REQUIRED;
-    } else if (formData.prerequisites.trim().length < FORM_VALIDATION.MIN_PREREQUISITES_LENGTH) {
-      newErrors.prerequisites = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PREREQUISITES_MIN_LENGTH;
-    } else if (formData.prerequisites.trim().length > FORM_VALIDATION.MAX_PREREQUISITES_LENGTH) {
-      newErrors.prerequisites = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PREREQUISITES_MAX_LENGTH;
-    }
+    newErrors.prerequisites = validateField(
+      formData.prerequisites,
+      FORM_VALIDATION.MIN_PREREQUISITES_LENGTH,
+      FORM_VALIDATION.MAX_PREREQUISITES_LENGTH,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PREREQUISITES_REQUIRED,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PREREQUISITES_MIN_LENGTH,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PREREQUISITES_MAX_LENGTH
+    );
 
     // Environmental Setup validation
-    if (!formData.environmentalSetup.trim()) {
-      newErrors.environmentalSetup = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_REQUIRED;
-    } else if (formData.environmentalSetup.trim().length < FORM_VALIDATION.MIN_SETUP_STEPS_LENGTH) {
-      newErrors.environmentalSetup = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_MIN_LENGTH;
-    } else if (formData.environmentalSetup.trim().length > FORM_VALIDATION.MAX_SETUP_STEPS_LENGTH) {
-      newErrors.environmentalSetup = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_MAX_LENGTH;
-    }
+    newErrors.environmentalSetup = validateField(
+      formData.environmentalSetup,
+      FORM_VALIDATION.MIN_SETUP_STEPS_LENGTH,
+      FORM_VALIDATION.MAX_SETUP_STEPS_LENGTH,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_REQUIRED,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_MIN_LENGTH,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_MAX_LENGTH
+    );
 
     // Local Development Server validation
-    if (!formData.localDevServer.trim()) {
-      newErrors.localDevServer = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.LOCAL_DEV_REQUIRED;
-    } else if (formData.localDevServer.trim().length < FORM_VALIDATION.MIN_LOCAL_DEV_LENGTH) {
-      newErrors.localDevServer = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.LOCAL_DEV_MIN_LENGTH;
-    } else if (formData.localDevServer.trim().length > FORM_VALIDATION.MAX_LOCAL_DEV_LENGTH) {
-      newErrors.localDevServer = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.LOCAL_DEV_MAX_LENGTH;
-    }
+    newErrors.localDevServer = validateField(
+      formData.localDevServer,
+      FORM_VALIDATION.MIN_LOCAL_DEV_LENGTH,
+      FORM_VALIDATION.MAX_LOCAL_DEV_LENGTH,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.LOCAL_DEV_REQUIRED,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.LOCAL_DEV_MIN_LENGTH,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.LOCAL_DEV_MAX_LENGTH
+    );
 
     // Deployment Info validation
-    if (!formData.deploymentInfo.trim()) {
-      newErrors.deploymentInfo = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DEPLOYMENT_REQUIRED;
-    } else if (formData.deploymentInfo.trim().length < FORM_VALIDATION.MIN_DEPLOYMENT_LENGTH) {
-      newErrors.deploymentInfo = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DEPLOYMENT_MIN_LENGTH;
-    } else if (formData.deploymentInfo.trim().length > FORM_VALIDATION.MAX_DEPLOYMENT_LENGTH) {
-      newErrors.deploymentInfo = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DEPLOYMENT_MAX_LENGTH;
-    }
+    newErrors.deploymentInfo = validateField(
+      formData.deploymentInfo,
+      FORM_VALIDATION.MIN_DEPLOYMENT_LENGTH,
+      FORM_VALIDATION.MAX_DEPLOYMENT_LENGTH,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DEPLOYMENT_REQUIRED,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DEPLOYMENT_MIN_LENGTH,
+      UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DEPLOYMENT_MAX_LENGTH
+    );
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

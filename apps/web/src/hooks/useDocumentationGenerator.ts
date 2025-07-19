@@ -18,6 +18,21 @@ interface UseDocumentationGeneratorReturn {
   resetState: () => void;
 }
 
+// Helper function to extract error messages
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    if (error.name === 'AbortError') {
+      return UI_CONSTANTS.ERROR_MESSAGES.TIMEOUT_ERROR;
+    }
+    if (error.message.includes('Failed to fetch')) {
+      return UI_CONSTANTS.ERROR_MESSAGES.NETWORK_ERROR;
+    }
+    return error.message;
+  }
+
+  return UI_CONSTANTS.ERROR_MESSAGES.UNKNOWN_ERROR;
+};
+
 export const useDocumentationGenerator = (): UseDocumentationGeneratorReturn => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,12 +67,14 @@ export const useDocumentationGenerator = (): UseDocumentationGeneratorReturn => 
       if (!res.ok) {
         const errorText = await res.text();
         console.error('API error response:', errorText);
+
         let errorData;
         try {
           errorData = JSON.parse(errorText);
         } catch {
           errorData = { error: errorText || `Server error (${res.status})` };
         }
+
         throw new Error(errorData.error || `Server error (${res.status})`);
       }
 
@@ -65,18 +82,7 @@ export const useDocumentationGenerator = (): UseDocumentationGeneratorReturn => 
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
     } catch (error) {
-      let errorMessage: string = UI_CONSTANTS.ERROR_MESSAGES.UNKNOWN_ERROR;
-
-      if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          errorMessage = UI_CONSTANTS.ERROR_MESSAGES.TIMEOUT_ERROR;
-        } else if (error.message.includes('Failed to fetch')) {
-          errorMessage = UI_CONSTANTS.ERROR_MESSAGES.NETWORK_ERROR;
-        } else {
-          errorMessage = error.message;
-        }
-      }
-
+      const errorMessage = getErrorMessage(error);
       setError(errorMessage);
       console.error('Error generating documentation:', error);
     } finally {

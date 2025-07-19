@@ -7,9 +7,7 @@ import { ErrorMessage } from './components/ErrorMessage';
 export default function App() {
   const { isLoading, error, downloadUrl, generateDocumentation, clearError, resetState } = useDocumentationGenerator();
 
-  const handleSubmit = async (formData: any) => {
-    await generateDocumentation(formData);
-  };
+  const handleSubmit = (formData: any) => generateDocumentation(formData);
 
   const handleReset = () => {
     resetState();
