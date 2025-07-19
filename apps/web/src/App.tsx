@@ -1,17 +1,9 @@
 import { useDocumentationGenerator } from './hooks/useDocumentationGenerator';
 import { Header } from './components/Header';
-import { DocumentationForm } from './components/DocumentationForm';
+import { MultiStepForm } from './components/MultiStepForm';
 import { DocumentationSuccess } from './components/DocumentationSuccess';
 import { ErrorMessage } from './components/ErrorMessage';
-
-interface DocumentationFormData {
-  projectName: string;
-  description: string;
-  prerequisites: string;
-  environmentalSetup: string;
-  localDevServer: string;
-  deploymentInfo: string;
-}
+import type { DocumentationFormData } from '@/lib/schemas';
 
 export default function App() {
   const { isLoading, error, downloadUrl, generateDocumentation, clearError, resetState } = useDocumentationGenerator();
@@ -32,7 +24,7 @@ export default function App() {
         {downloadUrl ? (
           <DocumentationSuccess downloadUrl={downloadUrl} onReset={handleReset} />
         ) : (
-          <DocumentationForm onSubmit={handleSubmit} isLoading={isLoading} />
+          <MultiStepForm onSubmit={handleSubmit} isLoading={isLoading} />
         )}
       </main>
     </div>
