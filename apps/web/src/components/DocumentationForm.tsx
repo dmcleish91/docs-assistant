@@ -19,8 +19,6 @@ interface DocumentationFormData {
 interface DocumentationFormProps {
   onSubmit: (formData: DocumentationFormData) => Promise<void>;
   isLoading: boolean;
-  error: string | null;
-  onErrorDismiss: () => void;
 }
 
 interface FormErrors {
@@ -32,7 +30,7 @@ interface FormErrors {
   deploymentInfo?: string;
 }
 
-export const DocumentationForm = ({ onSubmit, isLoading, error, onErrorDismiss }: DocumentationFormProps) => {
+export const DocumentationForm = ({ onSubmit, isLoading }: DocumentationFormProps) => {
   const [formData, setFormData] = useState<DocumentationFormData>({
     projectName: '',
     description: '',

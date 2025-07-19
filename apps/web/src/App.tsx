@@ -25,7 +25,7 @@ export default function App() {
         {downloadUrl ? (
           <DocumentationSuccess downloadUrl={downloadUrl} onReset={handleReset} />
         ) : (
-          <DocumentationForm onSubmit={handleSubmit} isLoading={isLoading} error={error} onErrorDismiss={clearError} />
+          <DocumentationForm onSubmit={handleSubmit} isLoading={isLoading} />
         )}
       </main>
     </div>

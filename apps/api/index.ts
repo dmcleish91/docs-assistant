@@ -125,7 +125,7 @@ app.post('/generate-documentation', async (c) => {
 // Health check endpoint
 app.get('/', (c) => c.text('Documentation Generator API is running!'));
 
-const port = process.env.PORT || 8787;
+const port = parseInt(process.env.PORT || '8787', 10);
 console.log(`🚀 API server starting on port ${port}`);
 
 export default {
