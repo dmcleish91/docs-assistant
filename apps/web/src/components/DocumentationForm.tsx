@@ -3,33 +3,89 @@ import { LoadingButton } from './LoadingButton';
 import { FORM_VALIDATION, UI_CONSTANTS } from '../constants';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
+interface DocumentationFormData {
+  projectName: string;
+  description: string;
+  setupSteps: string;
+  localDevServer: string;
+  deploymentInfo: string;
+}
+
 interface DocumentationFormProps {
-  onSubmit: (topic: string) => Promise<void>;
+  onSubmit: (formData: DocumentationFormData) => Promise<void>;
   isLoading: boolean;
   error: string | null;
   onErrorDismiss: () => void;
 }
 
 interface FormErrors {
-  topic?: string;
+  projectName?: string;
+  description?: string;
+  setupSteps?: string;
+  localDevServer?: string;
+  deploymentInfo?: string;
 }
 
 export const DocumentationForm = ({ onSubmit, isLoading, error, onErrorDismiss }: DocumentationFormProps) => {
-  const [input, setInput] = useState('');
+  const [formData, setFormData] = useState<DocumentationFormData>({
+    projectName: '',
+    description: '',
+    setupSteps: '',
+    localDevServer: '',
+    deploymentInfo: '',
+  });
   const [errors, setErrors] = useState<FormErrors>({});
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!input.trim()) {
-      newErrors.topic = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.REQUIRED;
-    } else if (input.trim().length < FORM_VALIDATION.MIN_TOPIC_LENGTH) {
-      newErrors.topic = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.MIN_LENGTH;
-    } else if (input.trim().length > FORM_VALIDATION.MAX_TOPIC_LENGTH) {
-      newErrors.topic = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.MAX_LENGTH;
+    // Project Name validation
+    if (!formData.projectName.trim()) {
+      newErrors.projectName = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PROJECT_NAME_REQUIRED;
+    } else if (formData.projectName.trim().length < FORM_VALIDATION.MIN_PROJECT_NAME_LENGTH) {
+      newErrors.projectName = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PROJECT_NAME_MIN_LENGTH;
+    } else if (formData.projectName.trim().length > FORM_VALIDATION.MAX_PROJECT_NAME_LENGTH) {
+      newErrors.projectName = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PROJECT_NAME_MAX_LENGTH;
+    }
+
+    // Description validation
+    if (!formData.description.trim()) {
+      newErrors.description = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DESCRIPTION_REQUIRED;
+    } else if (formData.description.trim().length < FORM_VALIDATION.MIN_DESCRIPTION_LENGTH) {
+      newErrors.description = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DESCRIPTION_MIN_LENGTH;
+    } else if (formData.description.trim().length > FORM_VALIDATION.MAX_DESCRIPTION_LENGTH) {
+      newErrors.description = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DESCRIPTION_MAX_LENGTH;
+    }
+
+    // Setup Steps validation
+    if (!formData.setupSteps.trim()) {
+      newErrors.setupSteps = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_REQUIRED;
+    } else if (formData.setupSteps.trim().length < FORM_VALIDATION.MIN_SETUP_STEPS_LENGTH) {
+      newErrors.setupSteps = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_MIN_LENGTH;
+    } else if (formData.setupSteps.trim().length > FORM_VALIDATION.MAX_SETUP_STEPS_LENGTH) {
+      newErrors.setupSteps = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_MAX_LENGTH;
+    }
+
+    // Local Development Server validation
+    if (!formData.localDevServer.trim()) {
+      newErrors.localDevServer = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.LOCAL_DEV_REQUIRED;
+    } else if (formData.localDevServer.trim().length < FORM_VALIDATION.MIN_LOCAL_DEV_LENGTH) {
+      newErrors.localDevServer = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.LOCAL_DEV_MIN_LENGTH;
+    } else if (formData.localDevServer.trim().length > FORM_VALIDATION.MAX_LOCAL_DEV_LENGTH) {
+      newErrors.localDevServer = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.LOCAL_DEV_MAX_LENGTH;
+    }
+
+    // Deployment Info validation
+    if (!formData.deploymentInfo.trim()) {
+      newErrors.deploymentInfo = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DEPLOYMENT_REQUIRED;
+    } else if (formData.deploymentInfo.trim().length < FORM_VALIDATION.MIN_DEPLOYMENT_LENGTH) {
+      newErrors.deploymentInfo = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DEPLOYMENT_MIN_LENGTH;
+    } else if (formData.deploymentInfo.trim().length > FORM_VALIDATION.MAX_DEPLOYMENT_LENGTH) {
+      newErrors.deploymentInfo = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DEPLOYMENT_MAX_LENGTH;
     }
 
     setErrors(newErrors);
@@ -43,63 +99,224 @@ export const DocumentationForm = ({ onSubmit, isLoading, error, onErrorDismiss }
       return;
     }
 
-    await onSubmit(input.trim());
+    await onSubmit(formData);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value;
-    setInput(value);
+  const handleInputChange = (field: keyof DocumentationFormData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
 
     // Clear error when user starts typing
-    if (errors.topic && value.trim().length >= FORM_VALIDATION.MIN_TOPIC_LENGTH) {
-      setErrors((prev) => ({ ...prev, topic: undefined }));
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
 
+  const getCharacterCount = (field: keyof DocumentationFormData): number => {
+    return formData[field].length;
+  };
+
+  const getMaxLength = (field: keyof DocumentationFormData): number => {
+    const maxLengths = {
+      projectName: FORM_VALIDATION.MAX_PROJECT_NAME_LENGTH,
+      description: FORM_VALIDATION.MAX_DESCRIPTION_LENGTH,
+      setupSteps: FORM_VALIDATION.MAX_SETUP_STEPS_LENGTH,
+      localDevServer: FORM_VALIDATION.MAX_LOCAL_DEV_LENGTH,
+      deploymentInfo: FORM_VALIDATION.MAX_DEPLOYMENT_LENGTH,
+    };
+    return maxLengths[field];
+  };
+
   return (
-    <Card className='w-full max-w-2xl mx-auto bg-white/10 backdrop-blur-md border-white/20'>
+    <Card className='w-full max-w-4xl mx-auto bg-white/10 backdrop-blur-md border-white/20'>
       <CardHeader>
-        <CardTitle className='text-center'>Documentation Generator</CardTitle>
+        <CardTitle className='text-center text-2xl font-bold'>Documentation Generator</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className='space-y-6' noValidate>
+          {/* Project Name */}
           <div className='space-y-2'>
-            <Label htmlFor='topic' className='text-base text-red-400 font-semibold'>
-              What would you like documentation for?
+            <Label htmlFor='projectName' className='text-base font-semibold'>
+              Project Name
+              <span className='text-red-400 font-bold ml-1' aria-label='required'>
+                *
+              </span>
+            </Label>
+            <Input
+              id='projectName'
+              name='projectName'
+              value={formData.projectName}
+              onChange={(e) => handleInputChange('projectName', e.target.value)}
+              required
+              disabled={isLoading}
+              aria-describedby={errors.projectName ? 'projectName-error' : 'projectName-help'}
+              aria-invalid={!!errors.projectName}
+              maxLength={FORM_VALIDATION.MAX_PROJECT_NAME_LENGTH}
+              className={cn('transition-all duration-300', errors.projectName && 'border-red-400 focus-visible:ring-red-400')}
+            />
+            {errors.projectName && (
+              <div id='projectName-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
+                {errors.projectName}
+              </div>
+            )}
+            <div id='projectName-help' className='text-sm text-muted-foreground mt-2'>
+              Enter a clear, descriptive name for your project.
+            </div>
+            <div className='text-xs text-muted-foreground text-right'>
+              {getCharacterCount('projectName')}/{getMaxLength('projectName')} characters
+            </div>
+          </div>
+
+          {/* Project Description */}
+          <div className='space-y-2'>
+            <Label htmlFor='description' className='text-base font-semibold'>
+              Project Description
               <span className='text-red-400 font-bold ml-1' aria-label='required'>
                 *
               </span>
             </Label>
             <Textarea
-              id='topic'
-              name='topic'
-              value={input}
-              onChange={handleInputChange}
-              placeholder='e.g., API for note-taking app, React component library, Database schema...'
+              id='description'
+              name='description'
+              value={formData.description}
+              onChange={(e) => handleInputChange('description', e.target.value)}
               rows={3}
               required
               disabled={isLoading}
-              aria-describedby={errors.topic ? 'topic-error' : 'topic-help'}
-              aria-invalid={!!errors.topic}
-              maxLength={FORM_VALIDATION.MAX_TOPIC_LENGTH}
-              className={cn('min-h-[120px] transition-all duration-300', errors.topic && 'border-red-400 focus-visible:ring-red-400')}
+              aria-describedby={errors.description ? 'description-error' : 'description-help'}
+              aria-invalid={!!errors.description}
+              maxLength={FORM_VALIDATION.MAX_DESCRIPTION_LENGTH}
+              className={cn('min-h-[120px] transition-all duration-300', errors.description && 'border-red-400 focus-visible:ring-red-400')}
             />
-            {errors.topic && (
-              <div id='topic-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
-                {errors.topic}
+            {errors.description && (
+              <div id='description-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
+                {errors.description}
               </div>
             )}
-            <div id='topic-help' className='text-sm text-muted-foreground mt-2 leading-relaxed'>
-              Describe what you need documentation for. Be specific for better results.
+            <div id='description-help' className='text-sm text-muted-foreground mt-2'>
+              Provide a comprehensive overview of your project's functionality and goals.
             </div>
             <div className='text-xs text-muted-foreground text-right'>
-              {input.length}/{FORM_VALIDATION.MAX_TOPIC_LENGTH} characters
+              {getCharacterCount('description')}/{getMaxLength('description')} characters
+            </div>
+          </div>
+
+          {/* Setup Steps */}
+          <div className='space-y-2'>
+            <Label htmlFor='setupSteps' className='text-base font-semibold'>
+              Environment Setup Steps
+              <span className='text-red-400 font-bold ml-1' aria-label='required'>
+                *
+              </span>
+            </Label>
+            <Textarea
+              id='setupSteps'
+              name='setupSteps'
+              value={formData.setupSteps}
+              onChange={(e) => handleInputChange('setupSteps', e.target.value)}
+              rows={4}
+              required
+              disabled={isLoading}
+              aria-describedby={errors.setupSteps ? 'setupSteps-error' : 'setupSteps-help'}
+              aria-invalid={!!errors.setupSteps}
+              maxLength={FORM_VALIDATION.MAX_SETUP_STEPS_LENGTH}
+              className={cn('min-h-[160px] transition-all duration-300', errors.setupSteps && 'border-red-400 focus-visible:ring-red-400')}
+            />
+            {errors.setupSteps && (
+              <div id='setupSteps-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
+                {errors.setupSteps}
+              </div>
+            )}
+            <div id='setupSteps-help' className='text-sm text-muted-foreground mt-2'>
+              Provide step-by-step instructions for setting up the development environment.
+            </div>
+            <div className='text-xs text-muted-foreground text-right'>
+              {getCharacterCount('setupSteps')}/{getMaxLength('setupSteps')} characters
+            </div>
+          </div>
+
+          {/* Local Development Server */}
+          <div className='space-y-2'>
+            <Label htmlFor='localDevServer' className='text-base font-semibold'>
+              Local Development Server Instructions
+              <span className='text-red-400 font-bold ml-1' aria-label='required'>
+                *
+              </span>
+            </Label>
+            <Textarea
+              id='localDevServer'
+              name='localDevServer'
+              value={formData.localDevServer}
+              onChange={(e) => handleInputChange('localDevServer', e.target.value)}
+              rows={3}
+              required
+              disabled={isLoading}
+              aria-describedby={errors.localDevServer ? 'localDevServer-error' : 'localDevServer-help'}
+              aria-invalid={!!errors.localDevServer}
+              maxLength={FORM_VALIDATION.MAX_LOCAL_DEV_LENGTH}
+              className={cn(
+                'min-h-[120px] transition-all duration-300',
+                errors.localDevServer && 'border-red-400 focus-visible:ring-red-400'
+              )}
+            />
+            {errors.localDevServer && (
+              <div id='localDevServer-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
+                {errors.localDevServer}
+              </div>
+            )}
+            <div id='localDevServer-help' className='text-sm text-muted-foreground mt-2'>
+              Provide instructions for starting and running the development server locally.
+            </div>
+            <div className='text-xs text-muted-foreground text-right'>
+              {getCharacterCount('localDevServer')}/{getMaxLength('localDevServer')} characters
+            </div>
+          </div>
+
+          {/* Deployment */}
+          <div className='space-y-2'>
+            <Label htmlFor='deploymentInfo' className='text-base font-semibold'>
+              Production Deployment Instructions
+              <span className='text-red-400 font-bold ml-1' aria-label='required'>
+                *
+              </span>
+            </Label>
+            <Textarea
+              id='deploymentInfo'
+              name='deploymentInfo'
+              value={formData.deploymentInfo}
+              onChange={(e) => handleInputChange('deploymentInfo', e.target.value)}
+              rows={3}
+              required
+              disabled={isLoading}
+              aria-describedby={errors.deploymentInfo ? 'deploymentInfo-error' : 'deploymentInfo-help'}
+              aria-invalid={!!errors.deploymentInfo}
+              maxLength={FORM_VALIDATION.MAX_DEPLOYMENT_LENGTH}
+              className={cn(
+                'min-h-[120px] transition-all duration-300',
+                errors.deploymentInfo && 'border-red-400 focus-visible:ring-red-400'
+              )}
+            />
+            {errors.deploymentInfo && (
+              <div id='deploymentInfo-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
+                {errors.deploymentInfo}
+              </div>
+            )}
+            <div id='deploymentInfo-help' className='text-sm text-muted-foreground mt-2'>
+              Provide step-by-step instructions for deploying the project to production.
+            </div>
+            <div className='text-xs text-muted-foreground text-right'>
+              {getCharacterCount('deploymentInfo')}/{getMaxLength('deploymentInfo')} characters
             </div>
           </div>
 
           <LoadingButton
             loading={isLoading}
-            disabled={!input.trim()}
+            disabled={
+              !formData.projectName.trim() ||
+              !formData.description.trim() ||
+              !formData.setupSteps.trim() ||
+              !formData.localDevServer.trim() ||
+              !formData.deploymentInfo.trim()
+            }
             loadingText={UI_CONSTANTS.LOADING_TEXT}
             type='submit'
             className='w-full'>

@@ -1,37 +1,31 @@
-import { useConversation } from './hooks/useConversation';
+import { useDocumentationGenerator } from './hooks/useDocumentationGenerator';
 import { Header } from './components/Header';
 import { DocumentationForm } from './components/DocumentationForm';
-import { Conversation } from './components/Conversation';
+import { DocumentationSuccess } from './components/DocumentationSuccess';
 import { ErrorMessage } from './components/ErrorMessage';
 
 export default function App() {
-  const { messages, currentTopic, isLoading, error, startConversation, sendResponse, downloadReadme, clearError, resetConversation } =
-    useConversation();
+  const { isLoading, error, downloadUrl, generateDocumentation, clearError, resetState } = useDocumentationGenerator();
 
-  const handleSubmit = async (topic: string) => {
-    await startConversation(topic);
+  const handleSubmit = async (formData: any) => {
+    await generateDocumentation(formData);
   };
 
-  const isInConversation = currentTopic && messages.length > 0;
+  const handleReset = () => {
+    resetState();
+  };
 
   return (
     <div className='min-h-screen min-w-screen flex flex-col items-center justify-center bg-background text-foreground p-4'>
-      <Header title='📚 Documentation Assistant' subtitle='Generate markdown documentation with AI' />
+      <Header title='📚 Documentation Generator' subtitle='Generate comprehensive README files with AI' />
 
       <main className='w-full max-w-4xl'>
         {error && <ErrorMessage error={error} onDismiss={clearError} />}
 
-        {!isInConversation ? (
-          <DocumentationForm onSubmit={handleSubmit} isLoading={isLoading} error={error} onErrorDismiss={clearError} />
+        {downloadUrl ? (
+          <DocumentationSuccess downloadUrl={downloadUrl} onReset={handleReset} />
         ) : (
-          <Conversation
-            messages={messages}
-            currentTopic={currentTopic}
-            isLoading={isLoading}
-            onSendResponse={sendResponse}
-            onDownloadReadme={downloadReadme}
-            onReset={resetConversation}
-          />
+          <DocumentationForm onSubmit={handleSubmit} isLoading={isLoading} error={error} onErrorDismiss={clearError} />
         )}
       </main>
     </div>
