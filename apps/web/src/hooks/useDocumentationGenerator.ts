@@ -4,11 +4,9 @@ import { API_CONFIG, UI_CONSTANTS } from '../constants';
 interface DocumentationFormData {
   projectName: string;
   description: string;
-  techStack: string;
-  setupSteps: string;
-  apiEndpoints: string;
+  environmentalSetup: string;
+  localDevServer: string;
   deploymentInfo: string;
-  additionalNotes: string;
 }
 
 interface UseDocumentationGeneratorReturn {
@@ -37,6 +35,8 @@ export const useDocumentationGenerator = (): UseDocumentationGeneratorReturn => 
     setIsLoading(true);
 
     try {
+      console.log('Sending form data to API:', JSON.stringify(formData, null, 2));
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), API_CONFIG.TIMEOUT);
 
@@ -51,6 +51,7 @@ export const useDocumentationGenerator = (): UseDocumentationGeneratorReturn => 
 
       if (!res.ok) {
         const errorText = await res.text();
+        console.error('API error response:', errorText);
         let errorData;
         try {
           errorData = JSON.parse(errorText);

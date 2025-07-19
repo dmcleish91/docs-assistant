@@ -10,7 +10,8 @@ import { cn } from '@/lib/utils';
 interface DocumentationFormData {
   projectName: string;
   description: string;
-  setupSteps: string;
+  prerequisites: string;
+  environmentalSetup: string;
   localDevServer: string;
   deploymentInfo: string;
 }
@@ -25,7 +26,8 @@ interface DocumentationFormProps {
 interface FormErrors {
   projectName?: string;
   description?: string;
-  setupSteps?: string;
+  prerequisites?: string;
+  environmentalSetup?: string;
   localDevServer?: string;
   deploymentInfo?: string;
 }
@@ -34,7 +36,8 @@ export const DocumentationForm = ({ onSubmit, isLoading, error, onErrorDismiss }
   const [formData, setFormData] = useState<DocumentationFormData>({
     projectName: '',
     description: '',
-    setupSteps: '',
+    prerequisites: '',
+    environmentalSetup: '',
     localDevServer: '',
     deploymentInfo: '',
   });
@@ -61,13 +64,22 @@ export const DocumentationForm = ({ onSubmit, isLoading, error, onErrorDismiss }
       newErrors.description = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.DESCRIPTION_MAX_LENGTH;
     }
 
-    // Setup Steps validation
-    if (!formData.setupSteps.trim()) {
-      newErrors.setupSteps = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_REQUIRED;
-    } else if (formData.setupSteps.trim().length < FORM_VALIDATION.MIN_SETUP_STEPS_LENGTH) {
-      newErrors.setupSteps = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_MIN_LENGTH;
-    } else if (formData.setupSteps.trim().length > FORM_VALIDATION.MAX_SETUP_STEPS_LENGTH) {
-      newErrors.setupSteps = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_MAX_LENGTH;
+    // Prerequisites validation
+    if (!formData.prerequisites.trim()) {
+      newErrors.prerequisites = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PREREQUISITES_REQUIRED;
+    } else if (formData.prerequisites.trim().length < FORM_VALIDATION.MIN_PREREQUISITES_LENGTH) {
+      newErrors.prerequisites = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PREREQUISITES_MIN_LENGTH;
+    } else if (formData.prerequisites.trim().length > FORM_VALIDATION.MAX_PREREQUISITES_LENGTH) {
+      newErrors.prerequisites = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.PREREQUISITES_MAX_LENGTH;
+    }
+
+    // Environmental Setup validation
+    if (!formData.environmentalSetup.trim()) {
+      newErrors.environmentalSetup = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_REQUIRED;
+    } else if (formData.environmentalSetup.trim().length < FORM_VALIDATION.MIN_SETUP_STEPS_LENGTH) {
+      newErrors.environmentalSetup = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_MIN_LENGTH;
+    } else if (formData.environmentalSetup.trim().length > FORM_VALIDATION.MAX_SETUP_STEPS_LENGTH) {
+      newErrors.environmentalSetup = UI_CONSTANTS.ERROR_MESSAGES.VALIDATION.SETUP_STEPS_MAX_LENGTH;
     }
 
     // Local Development Server validation
@@ -119,7 +131,8 @@ export const DocumentationForm = ({ onSubmit, isLoading, error, onErrorDismiss }
     const maxLengths = {
       projectName: FORM_VALIDATION.MAX_PROJECT_NAME_LENGTH,
       description: FORM_VALIDATION.MAX_DESCRIPTION_LENGTH,
-      setupSteps: FORM_VALIDATION.MAX_SETUP_STEPS_LENGTH,
+      prerequisites: FORM_VALIDATION.MAX_PREREQUISITES_LENGTH,
+      environmentalSetup: FORM_VALIDATION.MAX_SETUP_STEPS_LENGTH,
       localDevServer: FORM_VALIDATION.MAX_LOCAL_DEV_LENGTH,
       deploymentInfo: FORM_VALIDATION.MAX_DEPLOYMENT_LENGTH,
     };
@@ -200,37 +213,77 @@ export const DocumentationForm = ({ onSubmit, isLoading, error, onErrorDismiss }
             </div>
           </div>
 
-          {/* Setup Steps */}
+          {/* Prerequisites */}
           <div className='space-y-2'>
-            <Label htmlFor='setupSteps' className='text-base font-semibold'>
+            <Label htmlFor='prerequisites' className='text-base font-semibold'>
+              Prerequisites
+              <span className='text-red-400 font-bold ml-1' aria-label='required'>
+                *
+              </span>
+            </Label>
+            <Textarea
+              id='prerequisites'
+              name='prerequisites'
+              value={formData.prerequisites}
+              onChange={(e) => handleInputChange('prerequisites', e.target.value)}
+              rows={3}
+              required
+              disabled={isLoading}
+              aria-describedby={errors.prerequisites ? 'prerequisites-error' : 'prerequisites-help'}
+              aria-invalid={!!errors.prerequisites}
+              maxLength={FORM_VALIDATION.MAX_PREREQUISITES_LENGTH}
+              className={cn(
+                'min-h-[120px] transition-all duration-300',
+                errors.prerequisites && 'border-red-400 focus-visible:ring-red-400'
+              )}
+            />
+            {errors.prerequisites && (
+              <div id='prerequisites-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
+                {errors.prerequisites}
+              </div>
+            )}
+            <div id='prerequisites-help' className='text-sm text-muted-foreground mt-2'>
+              List any prerequisites or dependencies your project requires to run.
+            </div>
+            <div className='text-xs text-muted-foreground text-right'>
+              {getCharacterCount('prerequisites')}/{getMaxLength('prerequisites')} characters
+            </div>
+          </div>
+
+          {/* Environmental Setup */}
+          <div className='space-y-2'>
+            <Label htmlFor='environmentalSetup' className='text-base font-semibold'>
               Environment Setup Steps
               <span className='text-red-400 font-bold ml-1' aria-label='required'>
                 *
               </span>
             </Label>
             <Textarea
-              id='setupSteps'
-              name='setupSteps'
-              value={formData.setupSteps}
-              onChange={(e) => handleInputChange('setupSteps', e.target.value)}
+              id='environmentalSetup'
+              name='environmentalSetup'
+              value={formData.environmentalSetup}
+              onChange={(e) => handleInputChange('environmentalSetup', e.target.value)}
               rows={4}
               required
               disabled={isLoading}
-              aria-describedby={errors.setupSteps ? 'setupSteps-error' : 'setupSteps-help'}
-              aria-invalid={!!errors.setupSteps}
+              aria-describedby={errors.environmentalSetup ? 'environmentalSetup-error' : 'environmentalSetup-help'}
+              aria-invalid={!!errors.environmentalSetup}
               maxLength={FORM_VALIDATION.MAX_SETUP_STEPS_LENGTH}
-              className={cn('min-h-[160px] transition-all duration-300', errors.setupSteps && 'border-red-400 focus-visible:ring-red-400')}
+              className={cn(
+                'min-h-[160px] transition-all duration-300',
+                errors.environmentalSetup && 'border-red-400 focus-visible:ring-red-400'
+              )}
             />
-            {errors.setupSteps && (
-              <div id='setupSteps-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
-                {errors.setupSteps}
+            {errors.environmentalSetup && (
+              <div id='environmentalSetup-error' className='text-red-400 text-sm mt-2 font-medium' role='alert'>
+                {errors.environmentalSetup}
               </div>
             )}
-            <div id='setupSteps-help' className='text-sm text-muted-foreground mt-2'>
+            <div id='environmentalSetup-help' className='text-sm text-muted-foreground mt-2'>
               Provide step-by-step instructions for setting up the development environment.
             </div>
             <div className='text-xs text-muted-foreground text-right'>
-              {getCharacterCount('setupSteps')}/{getMaxLength('setupSteps')} characters
+              {getCharacterCount('environmentalSetup')}/{getMaxLength('environmentalSetup')} characters
             </div>
           </div>
 
@@ -313,7 +366,8 @@ export const DocumentationForm = ({ onSubmit, isLoading, error, onErrorDismiss }
             disabled={
               !formData.projectName.trim() ||
               !formData.description.trim() ||
-              !formData.setupSteps.trim() ||
+              !formData.prerequisites.trim() ||
+              !formData.environmentalSetup.trim() ||
               !formData.localDevServer.trim() ||
               !formData.deploymentInfo.trim()
             }

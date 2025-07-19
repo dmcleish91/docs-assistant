@@ -11,18 +11,6 @@ A fullstack tool to generate markdown documentation using LangChain.js, Hono, an
 - **File Download**: Direct markdown file download from the browser
 - **Error Handling**: Comprehensive error handling with user-friendly messages
 
-## 🏗️ Architecture
-
-```
-docs-assistant/
-├── apps/
-│   ├── api/          # Hono + LangChain.js backend
-│   └── web/          # Vite + React frontend
-├── packages/
-│   └── shared/       # Shared types and utilities
-└── turbo.json        # Turborepo configuration
-```
-
 ## 📦 Prerequisites
 
 - Node.js 18+

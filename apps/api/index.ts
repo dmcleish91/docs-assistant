@@ -44,77 +44,66 @@ const handleError = (error: any, c: any) => {
 const documentationPrompt = ChatPromptTemplate.fromMessages([
   [
     'system',
-    `You are a technical writer specializing in creating comprehensive README.md files for software projects.
-    
-    Create a well-structured, professional README.md file based on the provided project information.
-    Follow these guidelines:
-    
-    1. Use clear, concise language
-    2. Include all relevant sections based on the provided information
-    3. Use proper markdown formatting with headers, code blocks, and lists
-    4. Make it easy to read and navigate
-    5. Include practical examples where appropriate
-    6. Use badges and visual elements when relevant
-    
-    Structure the README with these sections (include only relevant ones):
-    - Project Title and Badges
-    - Description/Overview
-    - Features
-    - Technology Stack
-    - Prerequisites
-    - Installation & Setup
-    - Usage
-    - API Documentation (if provided)
-    - Deployment (if provided)
-    - Contributing
-    - License
-    - Additional Notes (if provided)
-    
-    Generate only the markdown content, no additional text or explanations.`,
+    `You are a technical writer specializing in creating a comprehensive README.md file documentation.
+     This readme is used so developers can understand the project and how to run it.
+     Create a well-structured README.md file based on the provided information.
+     Follow these guidelines:
+
+     Use clear, concise language
+     Use proper markdown formatting with headers, code blocks, and lists
+     Make it easy to read and navigate
+     Include practical examples where appropriate
+     Use visual elements when relevant
+     Do not wrap the output in \`\`\`markdown\`\`\` code blocks or any other formatting. 
+     
+     Structure the README with the below sections (don't include any extra sections):
+     
+     Project Name - The main title of your project
+     Table of Contents - A list of sections in the README for easy navigation.
+     Description - A brief description of your project.
+     Prerequisites - A list of prerequisites for running your project.
+     Environmental Setup - A list of environmental setup instructions for running your project.
+     Running the Development Server - A list of instructions for running your project's development server.
+     Deploying to Production - A list of instructions for deploying your project to production.
+     
+     Generate only the markdown content, no additional text or explanations.`,
   ],
   [
     'user',
     `Project Name: {projectName}
-    
-Description: {description}
-
-Technology Stack: {techStack}
-
-Setup Steps: {setupSteps}
-
-API Endpoints: {apiEndpoints}
-
-Deployment Information: {deploymentInfo}
-
-Additional Notes: {additionalNotes}
-
-Generate a comprehensive README.md file for this project.`,
+     Description: {description}
+     Prerequisites: {prerequisites}
+     Environmental Setup: {environmentalSetup}
+     Running the Development Server: {localDevServer}
+     Deploying to Production: {deploymentInfo}
+     Generate a comprehensive README.md file.`,
   ],
 ]);
 
 const generateDocumentationSchema = z.object({
   projectName: z.string().min(1, 'Project name is required'),
   description: z.string().min(1, 'Description is required'),
-  techStack: z.string().min(1, 'Tech stack is required'),
-  setupSteps: z.string().min(1, 'Setup steps are required'),
-  apiEndpoints: z.string().optional(),
-  deploymentInfo: z.string().optional(),
-  additionalNotes: z.string().optional(),
+  prerequisites: z.string().min(1, 'Prerequisites are required'),
+  environmentalSetup: z.string().min(1, 'Environmental setup is required'),
+  localDevServer: z.string().min(1, 'Local development server instructions are required'),
+  deploymentInfo: z.string().min(1, 'Deployment information is required'),
 });
 
 app.post('/generate-documentation', async (c) => {
   try {
     const body = await c.req.json();
+    console.log('Received request body:', JSON.stringify(body, null, 2));
+
     const formData = generateDocumentationSchema.parse(body);
+    console.log('Validated form data:', JSON.stringify(formData, null, 2));
 
     const doc = await documentationPrompt.pipe(llm).invoke({
       projectName: formData.projectName,
       description: formData.description,
-      techStack: formData.techStack,
-      setupSteps: formData.setupSteps,
-      apiEndpoints: formData.apiEndpoints || 'Not specified',
-      deploymentInfo: formData.deploymentInfo || 'Not specified',
-      additionalNotes: formData.additionalNotes || 'None',
+      prerequisites: formData.prerequisites,
+      environmentalSetup: formData.environmentalSetup,
+      localDevServer: formData.localDevServer,
+      deploymentInfo: formData.deploymentInfo,
     });
 
     const content = handleLLMResponse(doc.content);
@@ -128,6 +117,7 @@ app.post('/generate-documentation', async (c) => {
       },
     });
   } catch (error) {
+    console.error('Error in /generate-documentation:', error);
     return handleError(error, c);
   }
 });
