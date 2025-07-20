@@ -4,8 +4,13 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import type { DocumentationFormData } from '@/lib/schemas';
+import type { PlaceholderExample } from '@/constants/placeholders';
 
-export const ProjectBasicsStep = () => {
+interface ProjectBasicsStepProps {
+  placeholders: PlaceholderExample | null;
+}
+
+export const ProjectBasicsStep = ({ placeholders }: ProjectBasicsStepProps) => {
   const {
     register,
     formState: { errors },
@@ -27,6 +32,7 @@ export const ProjectBasicsStep = () => {
         <Input
           id='projectName'
           {...register('projectName')}
+          placeholder={placeholders?.projectName}
           aria-describedby={errors.projectName ? 'projectName-error' : 'projectName-help'}
           aria-invalid={!!errors.projectName}
           className={cn('transition-all duration-300', errors.projectName && 'border-red-400 focus-visible:ring-red-400')}
@@ -52,6 +58,7 @@ export const ProjectBasicsStep = () => {
         <Textarea
           id='description'
           {...register('description')}
+          placeholder={placeholders?.description}
           rows={3}
           aria-describedby={errors.description ? 'description-error' : 'description-help'}
           aria-invalid={!!errors.description}

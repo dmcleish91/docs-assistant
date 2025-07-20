@@ -3,8 +3,13 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import type { DocumentationFormData } from '@/lib/schemas';
+import type { PlaceholderExample } from '@/constants/placeholders';
 
-export const TechnicalDetailsStep = () => {
+interface TechnicalDetailsStepProps {
+  placeholders: PlaceholderExample | null;
+}
+
+export const TechnicalDetailsStep = ({ placeholders }: TechnicalDetailsStepProps) => {
   const {
     register,
     formState: { errors },
@@ -26,6 +31,7 @@ export const TechnicalDetailsStep = () => {
         <Textarea
           id='prerequisites'
           {...register('prerequisites')}
+          placeholder={placeholders?.prerequisites}
           rows={3}
           aria-describedby={errors.prerequisites ? 'prerequisites-error' : 'prerequisites-help'}
           aria-invalid={!!errors.prerequisites}
@@ -52,6 +58,7 @@ export const TechnicalDetailsStep = () => {
         <Textarea
           id='environmentalSetup'
           {...register('environmentalSetup')}
+          placeholder={placeholders?.environmentalSetup}
           rows={4}
           aria-describedby={errors.environmentalSetup ? 'environmentalSetup-error' : 'environmentalSetup-help'}
           aria-invalid={!!errors.environmentalSetup}

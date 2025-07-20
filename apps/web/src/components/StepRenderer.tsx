@@ -2,12 +2,14 @@ import { ProjectBasicsStep } from './steps/ProjectBasicsStep';
 import { TechnicalDetailsStep } from './steps/TechnicalDetailsStep';
 import { DevelopmentStep } from './steps/DevelopmentStep';
 import { ReviewStep } from './steps/ReviewStep';
+import type { PlaceholderExample } from '@/constants/placeholders';
 
 interface StepRendererProps {
   currentStep: number;
+  placeholders: PlaceholderExample | null;
 }
 
-export const StepRenderer = ({ currentStep }: StepRendererProps) => {
+export const StepRenderer = ({ currentStep, placeholders }: StepRendererProps) => {
   switch (currentStep) {
     case 1:
       return (
@@ -16,7 +18,7 @@ export const StepRenderer = ({ currentStep }: StepRendererProps) => {
             <h3 className='text-lg font-semibold'>Project Basics</h3>
             <p className='text-sm text-muted-foreground'>Enter your project information</p>
           </div>
-          <ProjectBasicsStep />
+          <ProjectBasicsStep placeholders={placeholders} />
         </div>
       );
     case 2:
@@ -26,7 +28,7 @@ export const StepRenderer = ({ currentStep }: StepRendererProps) => {
             <h3 className='text-lg font-semibold'>Technical Details</h3>
             <p className='text-sm text-muted-foreground'>Setup and prerequisites</p>
           </div>
-          <TechnicalDetailsStep />
+          <TechnicalDetailsStep placeholders={placeholders} />
         </div>
       );
     case 3:
@@ -36,7 +38,7 @@ export const StepRenderer = ({ currentStep }: StepRendererProps) => {
             <h3 className='text-lg font-semibold'>Development & Deployment</h3>
             <p className='text-sm text-muted-foreground'>Local dev and production setup</p>
           </div>
-          <DevelopmentStep />
+          <DevelopmentStep placeholders={placeholders} />
         </div>
       );
     case 4:

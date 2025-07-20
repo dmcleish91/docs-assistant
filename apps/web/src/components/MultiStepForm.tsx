@@ -7,6 +7,7 @@ import { StepNavigation } from './StepNavigation';
 import { StepRenderer } from './StepRenderer';
 import { steps } from './steps/step-config';
 import { documentationFormSchema, type DocumentationFormData } from '@/lib/schemas';
+import { usePlaceholders } from '@/hooks/usePlaceholders';
 
 interface MultiStepFormProps {
   onSubmit: (formData: DocumentationFormData) => Promise<void>;
@@ -15,6 +16,7 @@ interface MultiStepFormProps {
 
 export const MultiStepForm = ({ onSubmit, isLoading }: MultiStepFormProps) => {
   const [currentStep, setCurrentStep] = useState(1);
+  const placeholders = usePlaceholders();
 
   const form = useForm<DocumentationFormData>({
     resolver: zodResolver(documentationFormSchema),
@@ -76,7 +78,7 @@ export const MultiStepForm = ({ onSubmit, isLoading }: MultiStepFormProps) => {
             <StepIndicator currentStep={currentStep} totalSteps={steps.length} steps={steps} />
 
             <div className='space-y-6'>
-              <StepRenderer currentStep={currentStep} />
+              <StepRenderer currentStep={currentStep} placeholders={placeholders} />
 
               <StepNavigation
                 currentStep={currentStep}

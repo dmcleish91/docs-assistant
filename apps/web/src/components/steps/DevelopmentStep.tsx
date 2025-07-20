@@ -3,8 +3,13 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import type { DocumentationFormData } from '@/lib/schemas';
+import type { PlaceholderExample } from '@/constants/placeholders';
 
-export const DevelopmentStep = () => {
+interface DevelopmentStepProps {
+  placeholders: PlaceholderExample | null;
+}
+
+export const DevelopmentStep = ({ placeholders }: DevelopmentStepProps) => {
   const {
     register,
     formState: { errors },
@@ -26,6 +31,7 @@ export const DevelopmentStep = () => {
         <Textarea
           id='localDevServer'
           {...register('localDevServer')}
+          placeholder={placeholders?.localDevServer}
           rows={3}
           aria-describedby={errors.localDevServer ? 'localDevServer-error' : 'localDevServer-help'}
           aria-invalid={!!errors.localDevServer}
@@ -52,6 +58,7 @@ export const DevelopmentStep = () => {
         <Textarea
           id='deploymentInfo'
           {...register('deploymentInfo')}
+          placeholder={placeholders?.deploymentInfo}
           rows={4}
           aria-describedby={errors.deploymentInfo ? 'deploymentInfo-error' : 'deploymentInfo-help'}
           aria-invalid={!!errors.deploymentInfo}
