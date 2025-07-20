@@ -19,11 +19,11 @@ const llm = new ChatOpenAI({
   openAIApiKey: OPENAI_API_KEY,
 });
 
-const handleLLMResponse = (content: any): string => {
+function handleLLMResponse(content: any): string {
   return typeof content === 'string' ? content : JSON.stringify(content);
-};
+}
 
-const handleError = (error: any, c: any) => {
+function handleError(error: any, c: any) {
   console.error('API error:', error);
 
   if (error instanceof z.ZodError) {
@@ -36,7 +36,7 @@ const handleError = (error: any, c: any) => {
   }
 
   return c.json({ error: 'Internal server error', details: errorMessage }, 500);
-};
+}
 
 const documentationPrompt = ChatPromptTemplate.fromMessages([
   [
