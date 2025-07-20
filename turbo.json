@@ -1,16 +1,15 @@
 {
+  "$schema": "https://turbo.build/schema.json",
   "tasks": {
-    "dev": {
-      "dependsOn": ["^dev"],
-      "cache": false,
-      "persistent": true
-    },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "build/**"]
+      "outputs": ["dist/**"],
+      "env": ["VITE_API_BASE_URL", "VITE_API_TIMEOUT"]
     },
-    "lint": {
-      "outputs": []
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": ["VITE_API_BASE_URL", "VITE_API_TIMEOUT"]
     }
   }
 }

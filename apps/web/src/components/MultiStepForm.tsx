@@ -175,10 +175,8 @@ export const MultiStepForm = ({ onSubmit, isLoading }: MultiStepFormProps) => {
       <Card className='w-full max-w-4xl mx-auto bg-white/10 backdrop-blur-md border-white/20'>
         <CardContent className='p-6'>
           <div className='space-y-6'>
-            {/* Step Indicator */}
             <StepIndicator currentStep={currentStep} totalSteps={steps.length} steps={steps} />
 
-            {/* Form Content */}
             <div className='space-y-6'>
               {renderStep()}
 

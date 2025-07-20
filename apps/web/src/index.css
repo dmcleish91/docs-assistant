@@ -82,3 +82,235 @@ body {
   background-color: theme(colors.background);
   color: theme(colors.foreground);
 }
+
+/* Markdown Preview Styles */
+.markdown-preview {
+  line-height: 1.6;
+}
+
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3,
+.markdown-preview h4,
+.markdown-preview h5,
+.markdown-preview h6 {
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.markdown-preview h1:first-child,
+.markdown-preview h2:first-child,
+.markdown-preview h3:first-child,
+.markdown-preview h4:first-child,
+.markdown-preview h5:first-child,
+.markdown-preview h6:first-child {
+  margin-top: 0;
+}
+
+.markdown-preview p {
+  margin-bottom: 1em;
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  margin-bottom: 1em;
+  padding-left: 1.5em;
+}
+
+.markdown-preview li {
+  margin-bottom: 0.25em;
+}
+
+.markdown-preview blockquote {
+  margin: 1em 0;
+  padding-left: 1em;
+  border-left: 4px solid theme(colors.green.400);
+  font-style: italic;
+}
+
+.markdown-preview code {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.875em;
+}
+
+.markdown-preview pre {
+  margin: 1em 0;
+  padding: 1em;
+  background-color: theme(colors.gray.900);
+  border: 1px solid theme(colors.gray.700);
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+.markdown-preview pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.875em;
+  color: theme(colors.gray.100);
+}
+
+/* Syntax highlighting */
+.markdown-preview .hljs {
+  background: transparent;
+  color: theme(colors.gray.100);
+}
+
+.markdown-preview .hljs-keyword {
+  color: theme(colors.purple.400);
+}
+
+.markdown-preview .hljs-string {
+  color: theme(colors.green.400);
+}
+
+.markdown-preview .hljs-comment {
+  color: theme(colors.gray.500);
+  font-style: italic;
+}
+
+.markdown-preview .hljs-number {
+  color: theme(colors.blue.400);
+}
+
+.markdown-preview .hljs-function {
+  color: theme(colors.yellow.400);
+}
+
+.markdown-preview .hljs-title {
+  color: theme(colors.cyan.400);
+}
+
+.markdown-preview .hljs-params {
+  color: theme(colors.gray.300);
+}
+
+.markdown-preview .hljs-built_in {
+  color: theme(colors.orange.400);
+}
+
+.markdown-preview .hljs-literal {
+  color: theme(colors.red.400);
+}
+
+.markdown-preview .hljs-type {
+  color: theme(colors.blue.300);
+}
+
+.markdown-preview .hljs-variable {
+  color: theme(colors.gray.200);
+}
+
+.markdown-preview .hljs-attr {
+  color: theme(colors.yellow.300);
+}
+
+.markdown-preview .hljs-tag {
+  color: theme(colors.blue.400);
+}
+
+.markdown-preview .hljs-name {
+  color: theme(colors.cyan.400);
+}
+
+.markdown-preview .hljs-attribute {
+  color: theme(colors.yellow.300);
+}
+
+.markdown-preview .hljs-value {
+  color: theme(colors.green.400);
+}
+
+.markdown-preview .hljs-regexp {
+  color: theme(colors.orange.400);
+}
+
+.markdown-preview .hljs-symbol {
+  color: theme(colors.purple.400);
+}
+
+.markdown-preview .hljs-meta {
+  color: theme(colors.gray.500);
+}
+
+.markdown-preview .hljs-template-tag {
+  color: theme(colors.blue.400);
+}
+
+.markdown-preview .hljs-template-variable {
+  color: theme(colors.green.400);
+}
+
+.markdown-preview .hljs-addition {
+  color: theme(colors.green.400);
+  background-color: theme(colors.green.900 / 0.2);
+}
+
+.markdown-preview .hljs-deletion {
+  color: theme(colors.red.400);
+  background-color: theme(colors.red.900 / 0.2);
+}
+
+.markdown-preview .hljs-emphasis {
+  font-style: italic;
+}
+
+.markdown-preview .hljs-strong {
+  font-weight: 600;
+}
+
+.markdown-preview .hljs-link {
+  color: theme(colors.blue.400);
+  text-decoration: underline;
+}
+
+.markdown-preview .hljs-link:hover {
+  color: theme(colors.blue.300);
+}
+
+/* Table styles */
+.markdown-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+}
+
+.markdown-preview th,
+.markdown-preview td {
+  padding: 0.5em;
+  text-align: left;
+  border: 1px solid theme(colors.gray.700);
+}
+
+.markdown-preview th {
+  background-color: theme(colors.gray.800);
+  font-weight: 600;
+}
+
+.markdown-preview tr:nth-child(even) {
+  background-color: theme(colors.gray.900 / 0.3);
+}
+
+/* Horizontal rule */
+.markdown-preview hr {
+  border: none;
+  border-top: 1px solid theme(colors.gray.700);
+  margin: 2em 0;
+}
+
+/* Task list */
+.markdown-preview .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-preview .task-list-item input[type='checkbox'] {
+  margin-right: 0.5em;
+}
+
+/* Strikethrough */
+.markdown-preview del {
+  text-decoration: line-through;
+  color: theme(colors.gray.500);
+}

@@ -6,7 +6,7 @@ import { ErrorMessage } from './components/ErrorMessage';
 import type { DocumentationFormData } from '@/lib/schemas';
 
 export default function App() {
-  const { isLoading, error, downloadUrl, generateDocumentation, clearError, resetState } = useDocumentationGenerator();
+  const { isLoading, error, downloadUrl, markdownContent, generateDocumentation, clearError, resetState } = useDocumentationGenerator();
 
   const handleSubmit = (formData: DocumentationFormData) => generateDocumentation(formData);
 
@@ -22,7 +22,7 @@ export default function App() {
         {error && <ErrorMessage error={error} onDismiss={clearError} />}
 
         {downloadUrl ? (
-          <DocumentationSuccess downloadUrl={downloadUrl} onReset={handleReset} />
+          <DocumentationSuccess downloadUrl={downloadUrl} markdownContent={markdownContent || ''} onReset={handleReset} />
         ) : (
           <MultiStepForm onSubmit={handleSubmit} isLoading={isLoading} />
         )}

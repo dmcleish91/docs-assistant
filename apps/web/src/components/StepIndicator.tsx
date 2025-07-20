@@ -15,7 +15,6 @@ export const StepIndicator = ({ currentStep, totalSteps, steps }: StepIndicatorP
 
   return (
     <div className='w-full space-y-4'>
-      {/* Progress Bar */}
       <div className='space-y-2'>
         <div className='flex justify-between text-sm text-muted-foreground'>
           <span>
@@ -26,7 +25,6 @@ export const StepIndicator = ({ currentStep, totalSteps, steps }: StepIndicatorP
         <Progress value={progress} className='h-2' />
       </div>
 
-      {/* Step Titles */}
       <div className='flex justify-between'>
         {steps.map((step, index) => (
           <div

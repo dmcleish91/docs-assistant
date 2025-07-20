@@ -1,47 +1,37 @@
 import { useState, useEffect } from 'react';
-import { API_CONFIG, UI_CONSTANTS } from '../constants';
-
-interface DocumentationFormData {
-  projectName: string;
-  description: string;
-  environmentalSetup: string;
-  localDevServer: string;
-  deploymentInfo: string;
-}
+import { API_CONFIG } from '../constants';
+import type { DocumentationFormData } from '@/lib/schemas';
+import { handleError, parseApiError, logError } from '@/lib/errorHandling';
 
 interface UseDocumentationGeneratorReturn {
   isLoading: boolean;
   error: string | null;
   downloadUrl: string | null;
+  markdownContent: string | null;
   generateDocumentation: (formData: DocumentationFormData) => Promise<void>;
   clearError: () => void;
   resetState: () => void;
 }
 
-const getErrorMessage = (error: unknown): string => {
-  if (error instanceof Error) {
-    if (error.name === 'AbortError') {
-      return UI_CONSTANTS.ERROR_MESSAGES.TIMEOUT_ERROR;
-    }
-    if (error.message.includes('Failed to fetch')) {
-      return UI_CONSTANTS.ERROR_MESSAGES.NETWORK_ERROR;
-    }
-    return error.message;
-  }
-
-  return UI_CONSTANTS.ERROR_MESSAGES.UNKNOWN_ERROR;
-};
-
 export const useDocumentationGenerator = (): UseDocumentationGeneratorReturn => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [markdownContent, setMarkdownContent] = useState<string | null>(null);
 
   const clearError = () => setError(null);
 
+  const cleanupPreviousUrl = () => {
+    if (downloadUrl) {
+      URL.revokeObjectURL(downloadUrl);
+    }
+  };
+
   const resetState = () => {
     setError(null);
+    cleanupPreviousUrl();
     setDownloadUrl(null);
+    setMarkdownContent(null);
   };
 
   useEffect(() => {
@@ -70,26 +60,23 @@ export const useDocumentationGenerator = (): UseDocumentationGeneratorReturn => 
       clearTimeout(timeoutId);
 
       if (!res.ok) {
-        const errorText = await res.text();
-        console.error('API error response:', errorText);
-
-        let errorData;
-        try {
-          errorData = JSON.parse(errorText);
-        } catch {
-          errorData = { error: errorText || `Server error (${res.status})` };
-        }
-
-        throw new Error(errorData.error || `Server error (${res.status})`);
+        const errorResponse = await parseApiError(res);
+        throw new Error(errorResponse.message);
       }
 
       const blob = await res.blob();
+
+      cleanupPreviousUrl();
+
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
+
+      const text = await blob.text();
+      setMarkdownContent(text);
     } catch (error) {
-      const errorMessage = getErrorMessage(error);
-      setError(errorMessage);
-      console.error('Error generating documentation:', error);
+      const errorResponse = handleError(error, 'documentation-generation');
+      setError(errorResponse.userMessage);
+      logError(errorResponse, 'DocumentationGenerator');
     } finally {
       setIsLoading(false);
     }
@@ -99,6 +86,7 @@ export const useDocumentationGenerator = (): UseDocumentationGeneratorReturn => 
     isLoading,
     error,
     downloadUrl,
+    markdownContent,
     generateDocumentation,
     clearError,
     resetState,
