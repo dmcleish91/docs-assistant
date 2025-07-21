@@ -1,9 +1,13 @@
 import { useFormContext } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import type { DocumentationFormData } from '@/lib/schemas';
+import type { DocumentationFormData, SectionsConfig } from '@/lib/schemas';
 
-export const ReviewStep = () => {
+interface ReviewStepProps {
+  sectionsConfig: SectionsConfig;
+}
+
+export const ReviewStep = ({ sectionsConfig }: ReviewStepProps) => {
   const { watch } = useFormContext<DocumentationFormData>();
   const formData = watch();
 
@@ -14,6 +18,7 @@ export const ReviewStep = () => {
         { label: 'Project Name', value: formData.projectName },
         { label: 'Description', value: formData.description },
       ],
+      enabled: true, // Always enabled
     },
     {
       title: 'Technical Details',
@@ -21,6 +26,7 @@ export const ReviewStep = () => {
         { label: 'Prerequisites', value: formData.prerequisites },
         { label: 'Environment Setup', value: formData.environmentalSetup },
       ],
+      enabled: sectionsConfig.prerequisites || sectionsConfig.environmentalSetup,
     },
     {
       title: 'Development & Deployment',
@@ -28,8 +34,9 @@ export const ReviewStep = () => {
         { label: 'Local Development', value: formData.localDevServer },
         { label: 'Deployment', value: formData.deploymentInfo },
       ],
+      enabled: sectionsConfig.localDevServer || sectionsConfig.deploymentInfo,
     },
-  ];
+  ].filter((section) => section.enabled);
 
   return (
     <div className='space-y-6'>

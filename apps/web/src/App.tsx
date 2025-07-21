@@ -3,12 +3,12 @@ import { Header } from './components/Header';
 import { MultiStepForm } from './components/MultiStepForm';
 import { DocumentationSuccess } from './components/DocumentationSuccess';
 import { ErrorMessage } from './components/ErrorMessage';
-import type { DocumentationFormData } from '@/lib/schemas';
+import type { DynamicDocumentationFormData } from '@/lib/schemas';
 
 export default function App() {
   const { isLoading, error, downloadUrl, markdownContent, generateDocumentation, clearError, resetState } = useDocumentationGenerator();
 
-  const handleSubmit = (formData: DocumentationFormData) => generateDocumentation(formData);
+  const handleSubmit = (formData: DynamicDocumentationFormData) => generateDocumentation(formData);
 
   const handleReset = () => {
     resetState();

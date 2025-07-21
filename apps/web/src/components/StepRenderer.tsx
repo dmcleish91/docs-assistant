@@ -3,52 +3,65 @@ import { TechnicalDetailsStep } from './steps/TechnicalDetailsStep';
 import { DevelopmentStep } from './steps/DevelopmentStep';
 import { ReviewStep } from './steps/ReviewStep';
 import type { PlaceholderExample } from '@/constants/placeholders';
+import type { SectionsConfig } from '@/lib/schemas';
+import { useDynamicSteps } from '@/hooks/useDynamicSteps';
 
 interface StepRendererProps {
   currentStep: number;
   placeholders: PlaceholderExample | null;
+  sectionsConfig: SectionsConfig;
 }
 
-export const StepRenderer = ({ currentStep, placeholders }: StepRendererProps) => {
-  switch (currentStep) {
-    case 1:
+export const StepRenderer = ({ currentStep, placeholders, sectionsConfig }: StepRendererProps) => {
+  const { steps: dynamicSteps } = useDynamicSteps(sectionsConfig);
+
+  // Get the current step configuration
+  const currentStepConfig = dynamicSteps[currentStep - 1];
+
+  if (!currentStepConfig) {
+    return null;
+  }
+
+  // Render step based on dynamic configuration
+  switch (currentStepConfig.id) {
+    case 'basics':
       return (
         <div className='space-y-6'>
           <div>
-            <h3 className='text-lg font-semibold'>Project Basics</h3>
-            <p className='text-sm text-muted-foreground'>Enter your project information</p>
+            <h3 className='text-lg font-semibold'>{currentStepConfig.title}</h3>
+            <p className='text-sm text-muted-foreground'>{currentStepConfig.description}</p>
           </div>
           <ProjectBasicsStep placeholders={placeholders} />
         </div>
       );
-    case 2:
+    case 'technical':
       return (
         <div className='space-y-6'>
           <div>
-            <h3 className='text-lg font-semibold'>Technical Details</h3>
-            <p className='text-sm text-muted-foreground'>Setup and prerequisites</p>
+            <h3 className='text-lg font-semibold'>{currentStepConfig.title}</h3>
+            <p className='text-sm text-muted-foreground'>{currentStepConfig.description}</p>
           </div>
-          <TechnicalDetailsStep placeholders={placeholders} />
+          <TechnicalDetailsStep placeholders={placeholders} sectionsConfig={sectionsConfig} />
         </div>
       );
-    case 3:
+    case 'development':
       return (
         <div className='space-y-6'>
           <div>
-            <h3 className='text-lg font-semibold'>Development & Deployment</h3>
-            <p className='text-sm text-muted-foreground'>Local dev and production setup</p>
+            <h3 className='text-lg font-semibold'>{currentStepConfig.title}</h3>
+            <p className='text-sm text-muted-foreground'>{currentStepConfig.description}</p>
           </div>
-          <DevelopmentStep placeholders={placeholders} />
+          <DevelopmentStep placeholders={placeholders} sectionsConfig={sectionsConfig} />
         </div>
       );
-    case 4:
+    case 'review':
       return (
         <div className='space-y-6'>
           <div>
-            <h3 className='text-lg font-semibold'>Review & Submit</h3>
-            <p className='text-sm text-muted-foreground'>Final review before generation</p>
+            <h3 className='text-lg font-semibold'>{currentStepConfig.title}</h3>
+            <p className='text-sm text-muted-foreground'>{currentStepConfig.description}</p>
           </div>
-          <ReviewStep />
+          <ReviewStep sectionsConfig={sectionsConfig} />
         </div>
       );
     default:

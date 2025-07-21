@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { API_CONFIG } from '../constants';
-import type { DocumentationFormData } from '@/lib/schemas';
+import type { DynamicDocumentationFormData } from '@/lib/schemas';
 import { handleError, parseApiError, logError } from '@/lib/errorHandling';
 
 interface UseDocumentationGeneratorReturn {
@@ -8,7 +8,7 @@ interface UseDocumentationGeneratorReturn {
   error: string | null;
   downloadUrl: string | null;
   markdownContent: string | null;
-  generateDocumentation: (formData: DocumentationFormData) => Promise<void>;
+  generateDocumentation: (formData: DynamicDocumentationFormData) => Promise<void>;
   clearError: () => void;
   resetState: () => void;
 }
@@ -42,7 +42,7 @@ export const useDocumentationGenerator = (): UseDocumentationGeneratorReturn => 
     };
   }, [downloadUrl]);
 
-  const generateDocumentation = async (formData: DocumentationFormData) => {
+  const generateDocumentation = async (formData: DynamicDocumentationFormData) => {
     setError(null);
     setIsLoading(true);
 
