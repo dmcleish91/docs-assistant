@@ -20,7 +20,9 @@ export function StartPage({ onStart, onConfigure }: StartPageProps) {
             </div>
 
             <div className='space-y-2'>
-              <CardTitle className='text-4xl font-bold'>Readme Forge</CardTitle>
+              <CardTitle className='text-4xl font-bold'>
+                Readme <span className='text-green-600'>Forge</span>
+              </CardTitle>
               <CardDescription className='text-lg'>Documentation standardization tool</CardDescription>
             </div>
           </CardHeader>

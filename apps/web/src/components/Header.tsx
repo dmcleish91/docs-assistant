@@ -1,6 +1,6 @@
 interface HeaderProps {
-  title: string;
-  subtitle: string;
+  title: string | React.ReactNode;
+  subtitle: string | React.ReactNode;
 }
 
 export const Header = ({ title, subtitle }: HeaderProps) => (

@@ -30,7 +30,18 @@ export default function App() {
 
   return (
     <div className='min-h-screen min-w-screen flex flex-col items-center justify-center bg-background text-foreground p-4'>
-      <Header title='Readme Forge' subtitle='Craft documentation with AI Tools' />
+      <Header
+        title={
+          <>
+            Readme <span className='text-green-600'>Forge</span>
+          </>
+        }
+        subtitle={
+          <>
+            <span className='text-yellow-300'>Craft</span> documentation with AI Tools
+          </>
+        }
+      />
 
       <main className='w-full max-w-4xl'>
         {error && <ErrorMessage error={error} onDismiss={clearError} />}
