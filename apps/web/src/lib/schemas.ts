@@ -7,6 +7,8 @@ export interface SectionsConfig {
   environmentalSetup: boolean;
   localDevServer: boolean;
   deploymentInfo: boolean;
+  testing: boolean;
+  additionalInformation: boolean;
 }
 
 export interface DynamicStepConfig {
@@ -52,7 +54,21 @@ export const developmentSchema = z.object({
     .max(1000, 'Deployment instructions must be less than 1000 characters'),
 });
 
-export const documentationFormSchema = projectBasicsSchema.merge(technicalDetailsSchema).merge(developmentSchema);
+export const testingAndAdditionalInfoSchema = z.object({
+  testing: z
+    .string()
+    .min(10, 'Testing information must be at least 10 characters long')
+    .max(1000, 'Testing information must be less than 1000 characters'),
+  additionalInformation: z
+    .string()
+    .min(10, 'Additional information must be at least 10 characters long')
+    .max(1000, 'Additional information must be less than 1000 characters'),
+});
+
+export const documentationFormSchema = projectBasicsSchema
+  .merge(technicalDetailsSchema)
+  .merge(developmentSchema)
+  .merge(testingAndAdditionalInfoSchema);
 
 export const createDynamicSchema = (enabledSections: string[]) => {
   const baseSchema = z.object({
@@ -96,12 +112,27 @@ export const createDynamicSchema = (enabledSections: string[]) => {
       .max(1000, 'Deployment instructions must be less than 1000 characters');
   }
 
+  if (enabledSections.includes('testing')) {
+    optionalFields.testing = z
+      .string()
+      .min(10, 'Testing information must be at least 10 characters long')
+      .max(1000, 'Testing information must be less than 1000 characters');
+  }
+
+  if (enabledSections.includes('additionalInformation')) {
+    optionalFields.additionalInformation = z
+      .string()
+      .min(10, 'Additional information must be at least 10 characters long')
+      .max(1000, 'Additional information must be less than 1000 characters');
+  }
+
   return baseSchema.extend(optionalFields);
 };
 
 export type ProjectBasicsFormData = z.infer<typeof projectBasicsSchema>;
 export type TechnicalDetailsFormData = z.infer<typeof technicalDetailsSchema>;
 export type DevelopmentFormData = z.infer<typeof developmentSchema>;
+export type TestingAndAdditionalInfoFormData = z.infer<typeof testingAndAdditionalInfoSchema>;
 export type DocumentationFormData = z.infer<typeof documentationFormSchema>;
 
 export type DynamicDocumentationFormData = {
@@ -111,6 +142,8 @@ export type DynamicDocumentationFormData = {
   environmentalSetup?: string;
   localDevServer?: string;
   deploymentInfo?: string;
+  testing?: string;
+  additionalInformation?: string;
   config?: {
     sections: SectionsConfig;
   };

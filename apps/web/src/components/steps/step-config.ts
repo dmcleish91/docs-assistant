@@ -23,6 +23,11 @@ export const steps: StepConfig[] = [
     description: 'Dev & Deploy',
   },
   {
+    id: 'testing-and-additional-info',
+    title: 'Testing & Additional Info',
+    description: 'Testing & Additional Info',
+  },
+  {
     id: 'review',
     title: 'Review',
     description: 'Final Check',
@@ -66,6 +71,15 @@ export const STEP_CONFIGURATION: DynamicStepConfig[] = [
     isRequired: false,
     order: 4,
   },
+  {
+    id: 'testing-and-additional-info',
+    title: 'Testing & Additional Info',
+    description: '',
+    section: 'testing',
+    fields: ['testing', 'additionalInformation'],
+    isRequired: false,
+    order: 5,
+  },
 ];
 
 export const DEFAULT_SECTIONS_CONFIG: SectionsConfig = {
@@ -75,6 +89,8 @@ export const DEFAULT_SECTIONS_CONFIG: SectionsConfig = {
   environmentalSetup: true,
   localDevServer: true,
   deploymentInfo: true,
+  testing: true,
+  additionalInformation: true,
 };
 
 export const PRESET_CONFIGURATIONS = {
@@ -88,6 +104,8 @@ export const PRESET_CONFIGURATIONS = {
       environmentalSetup: false,
       localDevServer: false,
       deploymentInfo: false,
+      testing: false,
+      additionalInformation: false,
     } as SectionsConfig,
   },
   standard: {
@@ -100,6 +118,8 @@ export const PRESET_CONFIGURATIONS = {
       environmentalSetup: true,
       localDevServer: false,
       deploymentInfo: false,
+      testing: true,
+      additionalInformation: true,
     } as SectionsConfig,
   },
   comprehensive: {

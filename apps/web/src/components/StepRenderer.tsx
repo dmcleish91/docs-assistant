@@ -3,6 +3,7 @@ import { TechnicalDetailsStep } from './steps/TechnicalDetailsStep';
 import { DevelopmentStep } from './steps/DevelopmentStep';
 import { ReviewStep } from './steps/ReviewStep';
 import { ConfigurationStep } from './steps/ConfigurationStep';
+import { TestingAndAdditionalInfoStep } from './steps/TestingAndAdditionalInfoStep';
 import type { PlaceholderExample } from '@/constants/placeholders';
 import type { SectionsConfig } from '@/lib/schemas';
 import { useDynamicSteps } from '@/hooks/useDynamicSteps';
@@ -12,9 +13,10 @@ interface StepRendererProps {
   placeholders: PlaceholderExample | null;
   sectionsConfig: SectionsConfig;
   onConfigChange: (config: SectionsConfig) => void;
+  onContinue: () => void;
 }
 
-export const StepRenderer = ({ currentStep, placeholders, sectionsConfig, onConfigChange }: StepRendererProps) => {
+export const StepRenderer = ({ currentStep, placeholders, sectionsConfig, onConfigChange, onContinue }: StepRendererProps) => {
   const { steps: dynamicSteps } = useDynamicSteps(sectionsConfig);
 
   const currentStepConfig = dynamicSteps[currentStep - 1];
@@ -31,7 +33,7 @@ export const StepRenderer = ({ currentStep, placeholders, sectionsConfig, onConf
             <h3 className='text-lg font-semibold'>{currentStepConfig.title}</h3>
             <p className='text-sm text-muted-foreground'>{currentStepConfig.description}</p>
           </div>
-          <ConfigurationStep sectionsConfig={sectionsConfig} onConfigChange={onConfigChange} />
+          <ConfigurationStep sectionsConfig={sectionsConfig} onConfigChange={onConfigChange} onContinue={onContinue} />
         </div>
       );
     case 'basics':
@@ -62,6 +64,16 @@ export const StepRenderer = ({ currentStep, placeholders, sectionsConfig, onConf
             <p className='text-sm text-muted-foreground'>{currentStepConfig.description}</p>
           </div>
           <DevelopmentStep placeholders={placeholders} sectionsConfig={sectionsConfig} />
+        </div>
+      );
+    case 'testing-and-additional-info':
+      return (
+        <div className='space-y-6'>
+          <div>
+            <h3 className='text-lg font-semibold'>{currentStepConfig.title}</h3>
+            <p className='text-sm text-muted-foreground'>{currentStepConfig.description}</p>
+          </div>
+          <TestingAndAdditionalInfoStep placeholders={placeholders} sectionsConfig={sectionsConfig} />
         </div>
       );
     case 'review':

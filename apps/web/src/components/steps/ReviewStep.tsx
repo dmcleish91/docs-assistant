@@ -14,26 +14,34 @@ export const ReviewStep = ({ sectionsConfig }: ReviewStepProps) => {
     {
       title: 'Project Basics',
       fields: [
-        { label: 'Project Name', value: formData.projectName },
-        { label: 'Description', value: formData.description },
+        { label: 'Project Name', value: formData.projectName, enabled: true },
+        { label: 'Description', value: formData.description, enabled: true },
       ],
       enabled: true,
     },
     {
-      title: 'Technical Details',
+      title: 'Prerequisites & Environment Setup',
       fields: [
-        { label: 'Prerequisites', value: formData.prerequisites },
-        { label: 'Environment Setup', value: formData.environmentalSetup },
+        { label: 'Prerequisites', value: formData.prerequisites, enabled: sectionsConfig.prerequisites },
+        { label: 'Environment Setup', value: formData.environmentalSetup, enabled: sectionsConfig.environmentalSetup },
       ],
-      enabled: sectionsConfig.prerequisites || sectionsConfig.environmentalSetup,
+      enabled: sectionsConfig.prerequisites,
     },
     {
-      title: 'Development & Deployment',
+      title: 'Development & Deployment Instructions',
       fields: [
-        { label: 'Local Development', value: formData.localDevServer },
-        { label: 'Deployment', value: formData.deploymentInfo },
+        { label: 'Local Development', value: formData.localDevServer, enabled: sectionsConfig.localDevServer },
+        { label: 'Deployment', value: formData.deploymentInfo, enabled: sectionsConfig.deploymentInfo },
       ],
-      enabled: sectionsConfig.localDevServer || sectionsConfig.deploymentInfo,
+      enabled: sectionsConfig.localDevServer,
+    },
+    {
+      title: 'Testing & Additional Information',
+      fields: [
+        { label: 'Testing', value: formData.testing, enabled: sectionsConfig.testing },
+        { label: 'Additional Information', value: formData.additionalInformation, enabled: sectionsConfig.additionalInformation },
+      ],
+      enabled: sectionsConfig.testing,
     },
   ].filter((section) => section.enabled);
 
@@ -51,14 +59,16 @@ export const ReviewStep = ({ sectionsConfig }: ReviewStepProps) => {
               <CardTitle className='text-base flex items-center gap-2'>{section.title}</CardTitle>
             </CardHeader>
             <CardContent className='space-y-4'>
-              {section.fields.map((field, fieldIndex) => (
-                <div key={fieldIndex} className='space-y-2'>
-                  <div className='text-sm font-medium text-muted-foreground'>{field.label}</div>
-                  <div className='text-sm bg-muted/50 p-3 rounded-md max-h-32 overflow-y-auto'>
-                    {field.value || <span className='text-muted-foreground italic'>Not provided</span>}
+              {section.fields
+                .filter((field) => field.enabled)
+                .map((field, fieldIndex) => (
+                  <div key={fieldIndex} className='space-y-2'>
+                    <div className='text-sm font-medium text-muted-foreground'>{field.label}</div>
+                    <div className='text-sm bg-muted/50 p-3 rounded-md max-h-32 overflow-y-auto'>
+                      {field.value || <span className='text-muted-foreground italic'>Not provided</span>}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </CardContent>
           </Card>
         ))}

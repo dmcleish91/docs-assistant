@@ -57,6 +57,18 @@ const SECTIONS = {
     field: 'deploymentInfo',
     required: false,
   },
+  testing: {
+    title: 'Testing',
+    description: 'Testing procedures and instructions for the project.',
+    field: 'testing',
+    required: false,
+  },
+  additionalInformation: {
+    title: 'Additional Information',
+    description: 'Additional information, troubleshooting tips, contributing guidelines, etc.',
+    field: 'additionalInformation',
+    required: false,
+  },
 } as const;
 
 function handleLLMResponse(content: any): string {
@@ -161,6 +173,8 @@ const generateDocumentationSchema = z.object({
   environmentalSetup: z.string().optional(),
   localDevServer: z.string().optional(),
   deploymentInfo: z.string().optional(),
+  testing: z.string().optional(),
+  additionalInformation: z.string().optional(),
   config: z
     .object({
       sections: sectionsConfigSchema,

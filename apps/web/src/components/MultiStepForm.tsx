@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { StepIndicator } from './StepIndicator';
 import { StepNavigation } from './StepNavigation';
 import { StepRenderer } from './StepRenderer';
@@ -38,6 +37,8 @@ export const MultiStepForm = ({ onSubmit, isLoading, initialSectionsConfig }: Mu
       environmentalSetup: '',
       localDevServer: '',
       deploymentInfo: '',
+      testing: '',
+      additionalInformation: '',
     },
     mode: 'onBlur',
   });
@@ -51,6 +52,10 @@ export const MultiStepForm = ({ onSubmit, isLoading, initialSectionsConfig }: Mu
     if (!sectionsConfig.localDevServer) {
       delete filteredData.localDevServer;
       delete filteredData.deploymentInfo;
+    }
+    if (!sectionsConfig.testing) {
+      delete filteredData.testing;
+      delete filteredData.additionalInformation;
     }
 
     // Include the sections configuration
@@ -87,7 +92,16 @@ export const MultiStepForm = ({ onSubmit, isLoading, initialSectionsConfig }: Mu
 
   const handleConfigChange = (newConfig: SectionsConfig) => {
     setSectionsConfig(newConfig);
-    // Move to next step after configuration
+    // Update form validation schema when configuration changes
+    const newEnabledSections = Object.entries(newConfig)
+      .filter(([_, enabled]) => enabled)
+      .map(([section]) => section);
+
+    const newDynamicSchema = createDynamicSchema(newEnabledSections);
+    form.clearErrors();
+  };
+
+  const handleContinue = () => {
     setCurrentStep(currentStep + 1);
   };
 
@@ -109,6 +123,7 @@ export const MultiStepForm = ({ onSubmit, isLoading, initialSectionsConfig }: Mu
               placeholders={placeholders}
               sectionsConfig={sectionsConfig}
               onConfigChange={handleConfigChange}
+              onContinue={handleContinue}
             />
 
             <StepNavigation
