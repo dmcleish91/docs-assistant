@@ -13,6 +13,13 @@ interface StepIndicatorProps {
 export const StepIndicator = ({ currentStep, totalSteps, steps }: StepIndicatorProps) => {
   const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
 
+  // Hide the entire stepper when on the configuration step
+  const isConfigurationStep = steps[currentStep - 1]?.title === 'Configuration';
+
+  if (isConfigurationStep) {
+    return null;
+  }
+
   return (
     <div className='w-full space-y-4'>
       <div className='space-y-2'>

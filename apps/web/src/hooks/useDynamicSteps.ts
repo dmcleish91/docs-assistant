@@ -1,23 +1,24 @@
 import { useMemo } from 'react';
 import { STEP_CONFIGURATION } from '@/components/steps/step-config';
-import type { SectionsConfig, DynamicStepConfig } from '@/lib/schemas';
+import type { SectionsConfig } from '@/lib/schemas';
 
 export const useDynamicSteps = (sectionsConfig: SectionsConfig) => {
   const dynamicSteps = useMemo(() => {
-    // Filter steps based on enabled sections
     const enabledSteps = STEP_CONFIGURATION.filter((step) => {
-      if (step.isRequired) {
-        return true; // Always include required steps
+      // Configuration step is always included
+      if (step.id === 'configuration') {
+        return true;
       }
-
-      // For optional steps, check if their section is enabled
+      // Required steps are always included
+      if (step.isRequired) {
+        return true;
+      }
+      // Optional steps are included based on configuration
       return sectionsConfig[step.section];
     });
 
-    // Sort by order
     const sortedSteps = enabledSteps.sort((a, b) => a.order - b.order);
 
-    // Add review step if there are optional sections enabled
     const hasOptionalSections = Object.entries(sectionsConfig).some(([key, enabled]) => {
       if (key === 'projectName' || key === 'description') return false;
       return enabled;
@@ -28,7 +29,7 @@ export const useDynamicSteps = (sectionsConfig: SectionsConfig) => {
         id: 'review',
         title: 'Review',
         description: 'Final Check',
-        section: 'projectName', // Dummy section for review
+        section: 'projectName',
         fields: [],
         isRequired: false,
         order: sortedSteps.length + 1,

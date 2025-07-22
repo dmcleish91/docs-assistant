@@ -29,38 +29,45 @@ export const steps: StepConfig[] = [
   },
 ];
 
-// Dynamic step configuration mapping
 export const STEP_CONFIGURATION: DynamicStepConfig[] = [
+  {
+    id: 'configuration',
+    title: 'Configuration',
+    description: '',
+    section: 'projectName',
+    fields: [],
+    isRequired: true,
+    order: 1,
+  },
   {
     id: 'basics',
     title: 'Project Basics',
     description: '',
-    section: 'projectName', // Maps to both projectName and description
+    section: 'projectName',
     fields: ['projectName', 'description'],
     isRequired: true,
-    order: 1,
+    order: 2,
   },
   {
     id: 'technical',
     title: 'Technical Setup',
     description: '',
-    section: 'prerequisites', // Maps to both prerequisites and environmentalSetup
+    section: 'prerequisites',
     fields: ['prerequisites', 'environmentalSetup'],
     isRequired: false,
-    order: 2,
+    order: 3,
   },
   {
     id: 'development',
     title: 'Development & Deployment',
     description: '',
-    section: 'localDevServer', // Maps to both localDevServer and deploymentInfo
+    section: 'localDevServer',
     fields: ['localDevServer', 'deploymentInfo'],
     isRequired: false,
-    order: 3,
+    order: 4,
   },
 ];
 
-// Default configuration - all sections enabled
 export const DEFAULT_SECTIONS_CONFIG: SectionsConfig = {
   projectName: true,
   description: true,
@@ -70,7 +77,6 @@ export const DEFAULT_SECTIONS_CONFIG: SectionsConfig = {
   deploymentInfo: true,
 };
 
-// Preset configurations
 export const PRESET_CONFIGURATIONS = {
   minimal: {
     name: 'Minimal',

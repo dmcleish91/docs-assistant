@@ -13,6 +13,12 @@ interface StepNavigationProps {
 export const StepNavigation = ({ currentStep, totalSteps, onNext, onPrev, isLoading }: StepNavigationProps) => {
   const isFirstStep = currentStep === 1;
   const isLastStep = currentStep === totalSteps;
+  const isConfigurationStep = currentStep === 1; // Configuration is always the first step
+
+  // Hide navigation for configuration step since it has its own continue button
+  if (isConfigurationStep) {
+    return null;
+  }
 
   return (
     <div className='flex gap-2 pt-6'>

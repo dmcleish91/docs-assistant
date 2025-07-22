@@ -2,6 +2,7 @@ import { ProjectBasicsStep } from './steps/ProjectBasicsStep';
 import { TechnicalDetailsStep } from './steps/TechnicalDetailsStep';
 import { DevelopmentStep } from './steps/DevelopmentStep';
 import { ReviewStep } from './steps/ReviewStep';
+import { ConfigurationStep } from './steps/ConfigurationStep';
 import type { PlaceholderExample } from '@/constants/placeholders';
 import type { SectionsConfig } from '@/lib/schemas';
 import { useDynamicSteps } from '@/hooks/useDynamicSteps';
@@ -10,20 +11,29 @@ interface StepRendererProps {
   currentStep: number;
   placeholders: PlaceholderExample | null;
   sectionsConfig: SectionsConfig;
+  onConfigChange: (config: SectionsConfig) => void;
 }
 
-export const StepRenderer = ({ currentStep, placeholders, sectionsConfig }: StepRendererProps) => {
+export const StepRenderer = ({ currentStep, placeholders, sectionsConfig, onConfigChange }: StepRendererProps) => {
   const { steps: dynamicSteps } = useDynamicSteps(sectionsConfig);
 
-  // Get the current step configuration
   const currentStepConfig = dynamicSteps[currentStep - 1];
 
   if (!currentStepConfig) {
     return null;
   }
 
-  // Render step based on dynamic configuration
   switch (currentStepConfig.id) {
+    case 'configuration':
+      return (
+        <div className='space-y-6'>
+          <div>
+            <h3 className='text-lg font-semibold'>{currentStepConfig.title}</h3>
+            <p className='text-sm text-muted-foreground'>{currentStepConfig.description}</p>
+          </div>
+          <ConfigurationStep sectionsConfig={sectionsConfig} onConfigChange={onConfigChange} />
+        </div>
+      );
     case 'basics':
       return (
         <div className='space-y-6'>

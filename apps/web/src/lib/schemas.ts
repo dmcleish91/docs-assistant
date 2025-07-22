@@ -1,13 +1,12 @@
 import { z } from 'zod';
 
-// Configuration interfaces for dynamic stepper
 export interface SectionsConfig {
-  projectName: boolean; // Always required
-  description: boolean; // Always required
-  prerequisites: boolean; // Optional
-  environmentalSetup: boolean; // Optional
-  localDevServer: boolean; // Optional
-  deploymentInfo: boolean; // Optional
+  projectName: boolean;
+  description: boolean;
+  prerequisites: boolean;
+  environmentalSetup: boolean;
+  localDevServer: boolean;
+  deploymentInfo: boolean;
 }
 
 export interface DynamicStepConfig {
@@ -55,7 +54,6 @@ export const developmentSchema = z.object({
 
 export const documentationFormSchema = projectBasicsSchema.merge(technicalDetailsSchema).merge(developmentSchema);
 
-// Dynamic schema generation based on enabled sections
 export const createDynamicSchema = (enabledSections: string[]) => {
   const baseSchema = z.object({
     projectName: z
@@ -106,7 +104,6 @@ export type TechnicalDetailsFormData = z.infer<typeof technicalDetailsSchema>;
 export type DevelopmentFormData = z.infer<typeof developmentSchema>;
 export type DocumentationFormData = z.infer<typeof documentationFormSchema>;
 
-// Flexible form data type for dynamic configuration
 export type DynamicDocumentationFormData = {
   projectName: string;
   description: string;
@@ -114,4 +111,7 @@ export type DynamicDocumentationFormData = {
   environmentalSetup?: string;
   localDevServer?: string;
   deploymentInfo?: string;
+  config?: {
+    sections: SectionsConfig;
+  };
 };

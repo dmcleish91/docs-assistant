@@ -1,6 +1,5 @@
 import { useFormContext } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import type { DocumentationFormData, SectionsConfig } from '@/lib/schemas';
 
 interface ReviewStepProps {
@@ -18,7 +17,7 @@ export const ReviewStep = ({ sectionsConfig }: ReviewStepProps) => {
         { label: 'Project Name', value: formData.projectName },
         { label: 'Description', value: formData.description },
       ],
-      enabled: true, // Always enabled
+      enabled: true,
     },
     {
       title: 'Technical Details',
@@ -49,12 +48,7 @@ export const ReviewStep = ({ sectionsConfig }: ReviewStepProps) => {
         {sections.map((section, sectionIndex) => (
           <Card key={sectionIndex}>
             <CardHeader>
-              <CardTitle className='text-base flex items-center gap-2'>
-                {section.title}
-                <Badge variant='secondary' className='text-xs'>
-                  {section.fields.length} fields
-                </Badge>
-              </CardTitle>
+              <CardTitle className='text-base flex items-center gap-2'>{section.title}</CardTitle>
             </CardHeader>
             <CardContent className='space-y-4'>
               {section.fields.map((field, fieldIndex) => (
