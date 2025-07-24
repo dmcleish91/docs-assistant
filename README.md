@@ -24,7 +24,9 @@
 
 ## Overview
 
-Readme Forge transforms project descriptions into polished documentation using AI. Built with modern web technologies and a monorepo architecture for scalable development.
+Readme Forge empowers developers—regardless of technical writing skill—to quickly turn project details into clear,
+consistent, and professional README files. By leveraging conversational AI, it organizes raw input into well-structured
+documentation, ensuring every software project in your organization maintains high-quality, standardized readmes.
 
 ## Features
 
